@@ -1,0 +1,209 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="Python Components" data-km="សមាសធាតុ Python">សមាសធាតុ Python</h1>
+    <p class="lead" data-en="Learn about components and fundamental building blocks of Python." data-km="រៀនអំពីសមាសធាតុនិងគ្រឿងបង្កើតមូលដ្ឋានរបស់ Python។">រៀនអំពីសមាសធាតុនិងគ្រឿងបង្កើតមូលដ្ឋានរបស់ Python។</p>
+
+    <section class="section">
+      <h2 data-en="Classes and Objects" data-km="Classes និង Objects">Classes និង Objects</h2>
+      <p data-en="Python uses classes to create objects with properties and methods" data-km="Python ប្រើ classes ដើម្បីបង្កើត objects ដែលមានលក្ខណៈសម្បត្តិនិងវិធីសាស្ត្រ">Python ប្រើ classes ដើម្បីបង្កើត objects ដែលមានលក្ខណៈសម្បត្តិនិងវិធីសាស្ត្រ</p>
+      <pre><code>class Car:
+    def __init__(self, brand, model, year):
+        self.brand = brand
+        self.model = model
+        self.year = year
+        self.odometer = 0
+
+    def drive(self, distance):
+        self.odometer += distance
+        print(f"រត់ចម្ងាយ &#123;distance&#125; គីឡូម៉ែត្រ")
+
+    def get_info(self):
+        return f"&#123;self.year&#125; &#123;self.brand&#125; &#123;self.model&#125;"
+
+# បង្កើត object
+my_car = Car("Toyota", "Camry", 2023)
+print(my_car.get_info())
+my_car.drive(100)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Functions and Methods" data-km="Functions និង Methods">Functions និង Methods</h2>
+      <p data-en="Functions are the most fundamental components in Python" data-km="Functions គឺជាសមាសធាតុមូលដ្ឋានបំផុតក្នុង Python">Functions គឺជាសមាសធាតុមូលដ្ឋានបំផុតក្នុង Python</p>
+      <pre><code>def calculate_total(items):
+    """គណនាតម្លៃសរុប"""
+    total = sum(item['price'] for item in items)
+    return total
+
+def apply_discount(total, discount_percent):
+    """អនុវត្តបញ្ចុះតម្លៃ"""
+    discount = total * (discount_percent / 100)
+    return total - discount
+
+# ប្រើប្រាស់ functions
+items = [
+    &#123;'name': 'Book', 'price': 10&#125;,
+    &#123;'name': 'Pen', 'price': 2&#125;
+]
+total = calculate_total(items)
+final_price = apply_discount(total, 10)
+print(f"តម្លៃចុងក្រោយ $&#123;final_price&#125;")</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Decorators" data-km="Decorators">Decorators</h2>
+      <p data-en="Decorators are patterns that allow modifying or extending the behavior of functions" data-km="Decorators គឺជាគំរូដែលអនុញ្ញាតឱ្យកែប្រែឬពង្រីកអាកប្បកិរិយារបស់ functions">Decorators គឺជាគំរូដែលអនុញ្ញាតឱ្យកែប្រែឬពង្រីកអាកប្បកិរិយារបស់ functions</p>
+      <pre><code>def timer_decorator(func):
+    import time
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"&#123;func.__name__&#125; ចំណាយពេល &#123;end-start&#125; វិនាទី")
+        return result
+    return wrapper
+
+@timer_decorator
+def slow_function():
+    import time
+    time.sleep(1)
+    print("ការងារបានបញ្ចប់")
+
+slow_function()</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Context Managers" data-km="Context Managers">Context Managers</h2>
+      <p data-en="Context managers help manage resources like files and database connections" data-km="Context managers ជួយគ្រប់គ្រងធនធានដូចជាឯកសារនិងទំនាក់ទំនងមូលដ្ឋានទិន្នន័យ">Context managers ជួយគ្រប់គ្រងធនធានដូចជាឯកសារនិងទំនាក់ទំនងមូលដ្ឋានទិន្នន័យ</p>
+      <pre><code># ប្រើជាមួយឯកសារ
+with open('data.txt', 'r') as file:
+    content = file.read()
+    print(content)
+# ឯកសារនឹងបិទដោយស្វ័យប្រវត្តិ
+
+# បង្កើត context manager ផ្ទាល់ខ្លួន
+class DatabaseConnection:
+    def __enter__(self):
+        self.connection = connect_to_database()
+        return self.connection
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.connection.close()
+
+with DatabaseConnection() as conn:
+    conn.execute("SELECT * FROM users")</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Generators" data-km="Generators">Generators</h2>
+      <p data-en="Generators allow creating efficient iterators" data-km="Generators អនុញ្ញាតឱ្យបង្កើតអ្នកធ្វើកំណត់សម្គាល់ដោយប្រសិទ្ធភាព">Generators អនុញ្ញាតឱ្យបង្កើតអ្នកធ្វើកំណត់សម្គាល់ដោយប្រសិទ្ធភាព</p>
+      <pre><code>{`def fibonacci_generator(n):
+    """បង្កើតលំដាប់ Fibonacci"""
+    a, b = 0, 1
+    count = 0
+    while count < n:
+        yield a
+        a, b = b, a + b
+        count += 1
+
+# ប្រើ generator
+for num in fibonacci_generator(10):
+    print(num, end=' ')
+# Output: 0 1 1 2 3 5 8 13 21 34`}</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="List Comprehensions" data-km="List Comprehensions">List Comprehensions</h2>
+      <p data-en="List comprehensions provide intuitive syntax for creating lists" data-km="List comprehensions ផ្តល់នូវ syntax ងាយស្រួលសម្រាប់បង្កើតបញ្ជី">List comprehensions ផ្តល់នូវ syntax ងាយស្រួលសម្រាប់បង្កើតបញ្ជី</p>
+      <pre><code># បង្កើតបញ្ជីលេខគូ
+even_numbers = [x for x in range(20) if x % 2 == 0]
+
+# បង្កើតបញ្ជីស្មុគស្មាញ
+users = [
+    &#123;'name': 'Alice', 'age': 25&#125;,
+    &#123;'name': 'Bob', 'age': 30&#125;,
+    &#123;'name': 'Charlie', 'age': 35&#125;
+]
+names = [user['name'] for user in users if user['age'] > 25]
+print(names)  # ['Bob', 'Charlie']</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 24px 0 12px 0;
+    color: #111827;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

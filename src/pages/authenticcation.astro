@@ -1,0 +1,377 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="Authentication" data-km="ការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ (Authentication)">ការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ (Authentication)</h1>
+    <p class="lead" data-en="Implement secure authentication systems in Python." data-km="អនុវត្តប្រព័ន្ធផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវដែលមានសុវត្ថិភាពក្នុង Python។">អនុវត្តប្រព័ន្ធផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវដែលមានសុវត្ថិភាពក្នុង Python។</p>
+
+    <section class="section">
+      <h2 data-en="Password Hashing" data-km="Password Hashing">Password Hashing</h2>
+      <p data-en="Never store passwords as plain text. Use hashing" data-km="កុំរក្សាទុកពាក្យសម្ងាត់ជាអត្ថបទធម្មតា។ ប្រើ hashing">កុំរក្សាទុកពាក្យសម្ងាត់ជាអត្ថបទធម្មតា។ ប្រើ hashing</p>
+      <pre><code>from werkzeug.security import generate_password_hash, check_password_hash
+
+# Hash password
+password = "mypassword123"
+hashed = generate_password_hash(password)
+print(f"Hashed: &#123;hashed&#125;")
+
+# ពិនិត្យពាក្យសម្ងាត់
+is_valid = check_password_hash(hashed, "mypassword123")
+print(f"ត្រឹមត្រូវ &#123;is_valid&#125;")  # True
+
+is_valid = check_password_hash(hashed, "wrongpassword")
+print(f"ត្រឹមត្រូវ &#123;is_valid&#125;")  # False</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Registration and Login System (Flask)" data-km="ប្រព័ន្ធចុះឈ្មោះនិងចូល (Flask)">ប្រព័ន្ធចុះឈ្មោះនិងចូល (Flask)</h2>
+      <p data-en="Complete authentication system with Flask" data-km="ប្រព័ន្ធផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវពេញលេញជាមួយ Flask">ប្រព័ន្ធផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវពេញលេញជាមួយ Flask</p>
+      <pre><code>from flask import Flask, request, jsonify, session
+from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
+
+app = Flask(__name__)
+app.secret_key = 'your-secret-key'
+
+def get_db():
+    conn = sqlite3.connect('users.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# ចុះឈ្មោះ
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+    name = data.get('name')
+
+    # ពិនិត្យថាអ្នកប្រើប្រាស់មានរួចហើយឬនៅ
+    db = get_db()
+    existing_user = db.execute(
+        'SELECT * FROM users WHERE email = ?',
+        (email,)
+    ).fetchone()
+
+    if existing_user:
+        return jsonify(&#123;"error": "អ៊ីមែលនេះបានប្រើរួចហើយ"&#125;), 400
+
+    # បង្កើតអ្នកប្រើប្រាស់ថ្មី
+    hashed_password = generate_password_hash(password)
+    db.execute(
+        'INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
+        (email, hashed_password, name)
+    )
+    db.commit()
+
+    return jsonify(&#123;"message": "ចុះឈ្មោះបានជោគជ័យ"&#125;), 201
+
+# ចូលប្រើប្រាស់
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    # រកអ្នកប្រើប្រាស់
+    db = get_db()
+    user = db.execute(
+        'SELECT * FROM users WHERE email = ?',
+        (email,)
+    ).fetchone()
+
+    if not user:
+        return jsonify(&#123;"error": "អ៊ីមែលឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ"&#125;), 401
+
+    # ពិនិត្យពាក្យសម្ងាត់
+    if not check_password_hash(user['password'], password):
+        return jsonify(&#123;"error": "អ៊ីមែលឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ"&#125;), 401
+
+    # រក្សាទុក session
+    session['user_id'] = user['id']
+    session['email'] = user['email']
+
+    return jsonify(&#123;
+        'message': 'ចូលប្រើប្រាស់បានជោគជ័យ',
+        'user': &#123;
+            'id': user['id'],
+            'email': user['email'],
+            'name': user['name']
+        &#125;
+    &#125;)
+
+# ចាកចេញ
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return jsonify(&#123;"message": "ចាកចេញបានជោគជ័យ"&#125;)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="JWT Authentication" data-km="JWT Authentication">JWT Authentication</h2>
+      <p data-en="Use JSON Web Tokens for stateless authentication" data-km="ប្រើ JSON Web Tokens សម្រាប់ stateless authentication">ប្រើ JSON Web Tokens សម្រាប់ stateless authentication</p>
+      <pre><code>from flask import Flask, request, jsonify
+import jwt
+from datetime import datetime, timedelta
+from functools import wraps
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key'
+
+# បង្កើត JWT token
+def create_token(user_id):
+    payload = &#123;
+        'user_id': user_id,
+        'exp': datetime.utcnow() + timedelta(hours=24)
+    &#125;
+    token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
+    return token
+
+# Decorator ដើម្បីការពារ routes
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+
+        if not token:
+            return jsonify(&#123;"error": "ខ្វះ token"&#125;), 401
+
+        try:
+            # លុស "Bearer " prefix
+            if token.startswith('Bearer '):
+                token = token[7:]
+
+            data = jwt.decode(
+                token,
+                app.config['SECRET_KEY'],
+                algorithms=['HS256']
+            )
+            current_user_id = data['user_id']
+        except jwt.ExpiredSignatureError:
+            return jsonify(&#123;"error": "Token បានផុតកំណត់"&#125;), 401
+        except jwt.InvalidTokenError:
+            return jsonify(&#123;"error": "Token មិនត្រឹមត្រូវ"&#125;), 401
+
+        return f(current_user_id, *args, **kwargs)
+
+    return decorated
+
+# Login endpoint
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    # ពិនិត្យអ្នកប្រើប្រាស់ (សម្រាប់ឧទាហរណ៍)
+    user_id = 1
+    token = create_token(user_id)
+
+    return jsonify(&#123;
+        'token': token,
+        'message': 'ចូលប្រើប្រាស់បានជោគជ័យ'
+    &#125;)
+
+# Route ដែលការពារ
+@app.route('/protected', methods=['GET'])
+@token_required
+def protected(current_user_id):
+    return jsonify(&#123;
+        'message': 'ទិន្នន័យដែលការពារ',
+        'user_id': current_user_id
+    &#125;)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="OAuth2 with Google" data-km="OAuth2 ជាមួយ Google">OAuth2 ជាមួយ Google</h2>
+      <p data-en="Implement login through Google" data-km="អនុវត្តការចូលប្រើប្រាស់តាមរយៈ Google">អនុវត្តការចូលប្រើប្រាស់តាមរយៈ Google</p>
+      <pre><code>from flask import Flask, redirect, url_for, session
+from authlib.integrations.flask_client import OAuth
+
+app = Flask(__name__)
+app.secret_key = 'your-secret-key'
+
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id='YOUR_GOOGLE_CLIENT_ID',
+    client_secret='YOUR_GOOGLE_CLIENT_SECRET',
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs=&#123;
+        'scope': 'openid email profile'
+    &#125;
+)
+
+@app.route('/login/google')
+def login_google():
+    redirect_uri = url_for('authorize_google', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/authorize/google')
+def authorize_google():
+    token = google.authorize_access_token()
+    user_info = token.get('userinfo')
+
+    # រក្សាទុកទិន្នន័យអ្នកប្រើប្រាស់
+    session['user'] = &#123;
+        'email': user_info['email'],
+        'name': user_info['name'],
+        'picture': user_info['picture']
+    &#125;
+
+    return redirect(url_for('dashboard'))</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Role-Based Access Control" data-km="Role-Based Access Control">Role-Based Access Control</h2>
+      <p data-en="Manage permissions based on roles" data-km="គ្រប់គ្រងការអនុញ្ញាតតាមតួនាទី">គ្រប់គ្រងការអនុញ្ញាតតាមតួនាទី</p>
+      <pre><code>from functools import wraps
+from flask import jsonify, session
+
+def require_role(role):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            user_role = session.get('user_role')
+
+            if not user_role:
+                return jsonify(&#123;"error": "មិនបានចូលប្រើប្រាស់"&#125;), 401
+
+            if user_role != role:
+                return jsonify(&#123;"error": "មិនមានការអនុញ្ញាត"&#125;), 403
+
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+# ប្រើ decorator
+@app.route('/admin/users')
+@require_role('admin')
+def manage_users():
+    return jsonify(&#123;"message": "តំបន់គ្រប់គ្រងអ្នកប្រើប្រាស់"&#125;)
+
+@app.route('/user/profile')
+@require_role('user')
+def user_profile():
+    return jsonify(&#123;"message": "ប្រវត្តិរូបអ្នកប្រើប្រាស់"&#125;)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Two-Factor Authentication (2FA)" data-km="Two-Factor Authentication (2FA)">Two-Factor Authentication (2FA)</h2>
+      <p data-en="Add extra security with 2FA" data-km="បន្ថែមសុវត្ថិភាពបន្ថែមជាមួយ 2FA">បន្ថែមសុវត្ថិភាពបន្ថែមជាមួយ 2FA</p>
+      <pre><code>import pyotp
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# បង្កើត secret key សម្រាប់អ្នកប្រើប្រាស់
+def generate_secret():
+    return pyotp.random_base32()
+
+# បង្កើត QR code URI
+def get_qr_code_uri(secret, user_email):
+    totp = pyotp.TOTP(secret)
+    return totp.provisioning_uri(
+        name=user_email,
+        issuer_name='MyApp'
+    )
+
+# បើក 2FA
+@app.route('/enable-2fa', methods=['POST'])
+def enable_2fa():
+    user_email = 'user@example.com'
+    secret = generate_secret()
+
+    # រក្សាទុក secret ក្នុងមូលដ្ឋានទិន្នន័យ
+
+    qr_uri = get_qr_code_uri(secret, user_email)
+
+    return jsonify(&#123;
+        'secret': secret,
+        'qr_uri': qr_uri
+    &#125;)
+
+# ពិនិត្យលេខកូដ 2FA
+@app.route('/verify-2fa', methods=['POST'])
+def verify_2fa():
+    data = request.get_json()
+    code = data.get('code')
+    secret = data.get('secret')  # ទាញពីមូលដ្ឋានទិន្នន័យ
+
+    totp = pyotp.TOTP(secret)
+    is_valid = totp.verify(code)
+
+    if is_valid:
+        return jsonify(&#123;"message": "លេខកូដត្រឹមត្រូវ"&#125;)
+    else:
+        return jsonify(&#123;"error": "លេខកូដមិនត្រឹមត្រូវ"&#125;), 401</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

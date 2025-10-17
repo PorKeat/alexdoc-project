@@ -1,0 +1,303 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="State Management" data-km="ការគ្រប់គ្រងស្ថានភាព (State Management)">ការគ្រប់គ្រងស្ថានភាព (State Management)</h1>
+    <p class="lead" data-en="Learn patterns and techniques for managing Python application state." data-km="រៀនពីគំរូនិងបច្ចេកទេសសម្រាប់គ្រប់គ្រងស្ថានភាពកម្មវិធី Python។">រៀនពីគំរូនិងបច្ចេកទេសសម្រាប់គ្រប់គ្រងស្ថានភាពកម្មវិធី Python។</p>
+
+    <section class="section">
+      <h2 data-en="Global State with Module Variables" data-km="Global State ជាមួយ Module Variables">Global State ជាមួយ Module Variables</h2>
+      <p data-en="The simplest way to share state is through module variables" data-km="វិធីសាមញ្ញបំផុតក្នុងការចែករំលែកស្ថានភាពគឺតាមរយៈអថេរ module">វិធីសាមញ្ញបំផុតក្នុងការចែករំលែកស្ថានភាពគឺតាមរយៈអថេរ module</p>
+      <pre><code># state.py
+_app_state = &#123;
+    'user': None,
+    'settings': &#123;&#125;,
+    'data': []
+&#125;
+
+def get_state():
+    """ទទួលយកស្ថានភាពទាំងមូល"""
+    return _app_state
+
+def set_user(user):
+    """កំណត់អ្នកប្រើប្រាស់បច្ចុប្បន្ន"""
+    _app_state['user'] = user
+
+def get_user():
+    """ទទួលយកអ្នកប្រើប្រាស់បច្ចុប្បន្ន"""
+    return _app_state['user']
+
+# ប្រើក្នុងផ្នែកផ្សេងៗនៃកម្មវិធី
+from state import set_user, get_user
+
+set_user(&#123;'id': 1, 'name': 'Alice'&#125;)
+current_user = get_user()</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Singleton Pattern" data-km="Singleton Pattern">Singleton Pattern</h2>
+      <p data-en="Singleton ensures a class has only one instance" data-km="Singleton ធានាថា class មានតែ instance មួយᡢត់">Singleton ធានាថា class មានតែ instance មួយᡢត់</p>
+      <pre><code>class AppState:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.user = None
+            cls._instance.settings = &#123;&#125;
+        return cls._instance
+
+    def set_user(self, user):
+        self.user = user
+
+    def get_user(self):
+        return self.user
+
+# ប្រើ Singleton
+state1 = AppState()
+state1.set_user(&#123;'name': 'Alice'&#125;)
+
+state2 = AppState()
+print(state2.get_user())  # &#123;'name': 'Alice'&#125;
+print(state1 is state2)   # True</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Context Variables (Threading)" data-km="Context Variables (Threading)">Context Variables (Threading)</h2>
+      <p data-en="For multi-threaded applications, use context variables" data-km="សម្រាប់កម្មវិធី multi-threaded ប្រើ context variables">សម្រាប់កម្មវិធី multi-threaded ប្រើ context variables</p>
+      <pre><code>import contextvars
+from threading import Thread
+
+# បង្កើត context variable
+current_user = contextvars.ContextVar('current_user', default=None)
+
+def process_request(user_id):
+    # កំណត់ស្ថានភាពសម្រាប់ thread នេះ
+    user = &#123;'id': user_id, 'name': f'User &#123;user_id&#125;'&#125;
+    current_user.set(user)
+
+    # ប្រើស្ថានភាព
+    user_data = current_user.get()
+    print(f"Thread &#123;user_id&#125;: &#123;user_data&#125;")
+
+# បង្កើត threads ជាច្រើន
+threads = []
+for i in range(3):
+    thread = Thread(target=process_request, args=(i,))
+    threads.append(thread)
+    thread.start()
+
+for thread in threads:
+    thread.join()</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Flask Session Management" data-km="Flask Session Management">Flask Session Management</h2>
+      <p data-en="Flask provides secure session management" data-km="Flask ផ្តល់នូវ session management ដែលមានសុវត្ថិភាព">Flask ផ្តល់នូវ session management ដែលមានសុវត្ថិភាព</p>
+      <pre><code>from flask import Flask, session, redirect, url_for
+
+app = Flask(__name__)
+app.secret_key = 'your-secret-key-here'
+
+@app.route('/login', methods=['POST'])
+def login():
+    # រក្សាទុកទិន្នន័យក្នុង session
+    session['user_id'] = 123
+    session['username'] = 'alice'
+    session['is_authenticated'] = True
+    return redirect(url_for('dashboard'))
+
+@app.route('/dashboard')
+def dashboard():
+    # អាន session
+    if not session.get('is_authenticated'):
+        return redirect(url_for('login'))
+
+    username = session.get('username')
+    return f'ស្វាគមន៍ &#123;username&#125;'
+
+@app.route('/logout')
+def logout():
+    # លុប session
+    session.clear()
+    return redirect(url_for('home'))</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Redux-Style State Management" data-km="Redux-Style State Management">Redux-Style State Management</h2>
+      <p data-en="Implement Redux-like pattern for complex state management" data-km="អនុវត្តᡢំរូដូច Redux សម្រាប់ការᡢ្រប់ᡢ្រងស្ថានភាពស្មុᡢស្មាញ">អនុវត្តᡢំរូដូច Redux សម្រាប់ការᡢ្រប់ᡢ្រងស្ថានភាពស្មុᡢស្មាញ</p>
+      <pre><code>class Store:
+    def __init__(self, initial_state=None):
+        self.state = initial_state or &#123;&#125;
+        self.listeners = []
+
+    def get_state(self):
+        return self.state.copy()
+
+    def dispatch(self, action):
+        """ធ្វើបច្ចុប្បន្នភាពស្ថានភាពតាម action"""
+        action_type = action.get('type')
+
+        if action_type == 'SET_USER':
+            self.state['user'] = action.get('payload')
+        elif action_type == 'UPDATE_SETTINGS':
+            self.state['settings'].update(action.get('payload'))
+        elif action_type == 'ADD_ITEM':
+            self.state['items'].append(action.get('payload'))
+
+        # ជូនដំណឹងដល់ listeners
+        self._notify_listeners()
+
+    def subscribe(self, listener):
+        """ចុះឈ្មោះសម្រាប់ការផ្លាស់ប្តូរស្ថានភាព"""
+        self.listeners.append(listener)
+
+    def _notify_listeners(self):
+        for listener in self.listeners:
+            listener(self.state)
+
+# ប្រើ Store
+store = Store(&#123;
+    'user': None,
+    'settings': &#123;&#125;,
+    'items': []
+&#125;)
+
+def on_state_change(state):
+    print(f"ស្ថានភាពបានផ្លាស់ប្តូរ = &#123;state&#125;")
+
+store.subscribe(on_state_change)
+
+# Dispatch actions
+store.dispatch(&#123;
+    'type': 'SET_USER',
+    'payload': &#123;'id': 1, 'name': 'Alice'&#125;
+&#125;)
+
+store.dispatch(&#123;
+    'type': 'ADD_ITEM',
+    'payload': &#123;'id': 1, 'name': 'Item 1'&#125;
+&#125;)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Database as State" data-km="Database as State">Database as State</h2>
+      <p data-en="Use database to store persistent state" data-km="ប្រើមូលដ្ឋានទិន្នន័យដើម្បីរក្សាទុកស្ថានភាពអចិន្ត្រៃយ៍">ប្រើមូលដ្ឋានទិន្នន័យដើម្បីរក្សាទុកស្ថានភាពអចិន្ត្រៃយ៍</p>
+      <pre><code>import sqlite3
+
+class DatabaseState:
+    def __init__(self, db_path='app_state.db'):
+        self.conn = sqlite3.connect(db_path)
+        self._init_db()
+
+    def _init_db(self):
+        cursor = self.conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS state (
+                key TEXT PRIMARY KEY,
+                value TEXT
+            )
+        ''')
+        self.conn.commit()
+
+    def set(self, key, value):
+        """រក្សាទុកតម្លៃ"""
+        import json
+        cursor = self.conn.cursor()
+        cursor.execute(
+            'INSERT OR REPLACE INTO state (key, value) VALUES (?, ?)',
+            (key, json.dumps(value))
+        )
+        self.conn.commit()
+
+    def get(self, key, default=None):
+        """ទទួលយកតម្លៃ"""
+        import json
+        cursor = self.conn.cursor()
+        result = cursor.execute(
+            'SELECT value FROM state WHERE key = ?',
+            (key,)
+        ).fetchone()
+
+        if result:
+            return json.loads(result[0])
+        return default
+
+# ប្រើ Database State
+state = DatabaseState()
+state.set('user', &#123;'id': 1, 'name': 'Alice'&#125;)
+user = state.get('user')
+print(user)</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

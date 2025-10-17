@@ -1,0 +1,627 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "AlexDoc - Python Documentation" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="km">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="layout">
+      <header class="header">
+        <div class="header-content">
+          <a href="/" class="logo">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="logo-text">AlexDoc</span>
+          </a>
+
+          <div class="header-actions">
+            <!-- Language Toggle -->
+            <button class="lang-toggle" aria-label="Toggle language" title="Switch Language">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span class="lang-label">EN</span>
+            </button>
+
+            <!-- Theme Toggle -->
+            <button class="theme-toggle" aria-label="Toggle theme" title="Toggle Dark/Light Mode">
+              <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+              <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            </button>
+
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="sidebar">
+        <nav class="nav">
+          <div class="nav-section">
+            <h3 data-en="Getting Started" data-km="ការចាប់ផ្តើម">ការចាប់ផ្តើម</h3>
+            <ul>
+              <li><a href="/" data-en="Introduction" data-km="ណែនាំ">ណែនាំ</a></li>
+              <li><a href="/installation" data-en="Installation" data-km="ការដំឡើង">ការដំឡើង</a></li>
+              <li><a href="/quick-start" data-en="Quick Start" data-km="ចាប់ផ្តើមរហ័ស">ចាប់ផ្តើមរហ័ស</a></li>
+            </ul>
+          </div>
+
+          <div class="nav-section">
+            <h3 data-en="Core Concepts" data-km="គោលគំនិតសំខាន់">គោលគំនិតសំខាន់</h3>
+            <ul>
+              <li><a href="/architecture" data-en="Architecture" data-km="ស្ថាបត្យកម្ម">ស្ថាបត្យកម្ម</a></li>
+              <li><a href="/components" data-en="Components" data-km="សមាសធាតុ">សមាសធាតុ</a></li>
+              <li><a href="/routing" data-en="Routing" data-km="ការបញ្ជូនបន្ត">ការបញ្ជូនបន្ត</a></li>
+              <li><a href="/state-management" data-en="State Management" data-km="គ្រប់គ្រងស្ថានភាព">គ្រប់គ្រងស្ថានភាព</a></li>
+            </ul>
+          </div>
+
+          <div class="nav-section">
+            <h3 data-en="Guides" data-km="ណែនាំ">ណែនាំ</h3>
+            <ul>
+              <li><a href="/authentication" data-en="Authentication" data-km="ផ្ទៀងផ្ទាត់">ផ្ទៀងផ្ទាត់</a></li>
+              <li><a href="/database" data-en="Database" data-km="មូលដ្ឋានទិន្នន័យ">មូលដ្ឋានទិន្នន័យ</a></li>
+              <li><a href="/deployment" data-en="Deployment" data-km="ដាក់ពង្រាយ">ដាក់ពង្រាយ</a></li>
+              <li><a href="/best-practices" data-en="Best Practices" data-km="ការអនុវត្តល្អ">ការអនុវត្តល្អ</a></li>
+            </ul>
+          </div>
+
+          <div class="nav-section">
+            <h3 data-en="API Reference" data-km="សេចក្តីយោង API">សេចក្តីយោង API</h3>
+            <ul>
+              <li><a href="/api/overview" data-en="Overview" data-km="ទិដ្ឋភាពទូទៅ">ទិដ្ឋភាពទូទៅ</a></li>
+              <li><a href="/api/methods" data-en="Methods" data-km="វិធីសាស្ត្រ">វិធីសាស្ត្រ</a></li>
+              <li><a href="/api/types" data-en="Types" data-km="ប្រភេទ">ប្រភេទ</a></li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <div class="content">
+          <slot />
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Theme Management
+      const themeToggle = document.querySelector('.theme-toggle');
+      const html = document.documentElement;
+
+      // Load saved theme or default to light
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      html.setAttribute('data-theme', savedTheme);
+
+      themeToggle?.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+
+      // Language Management
+      const langToggle = document.querySelector('.lang-toggle');
+      const langLabel = document.querySelector('.lang-label');
+
+      // Load saved language or default to Khmer
+      const savedLang = localStorage.getItem('lang') || 'km';
+      html.setAttribute('lang', savedLang);
+      if (langLabel) langLabel.textContent = savedLang === 'km' ? 'EN' : 'KH';
+
+      // Update all translatable elements
+      function updateLanguage(lang: string) {
+        document.querySelectorAll('[data-en][data-km]').forEach(el => {
+          el.textContent = lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-km');
+        });
+      }
+
+      updateLanguage(savedLang);
+
+      langToggle?.addEventListener('click', () => {
+        const currentLang = html.getAttribute('lang');
+        const newLang = currentLang === 'km' ? 'en' : 'km';
+        html.setAttribute('lang', newLang);
+        localStorage.setItem('lang', newLang);
+        if (langLabel) langLabel.textContent = newLang === 'km' ? 'EN' : 'KH';
+        updateLanguage(newLang);
+      });
+
+      // Mobile Menu
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      const sidebar = document.querySelector('.sidebar');
+
+      mobileMenuBtn?.addEventListener('click', () => {
+        sidebar?.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (sidebar?.classList.contains('open') &&
+            !sidebar.contains(e.target as Node) &&
+            !mobileMenuBtn?.contains(e.target as Node)) {
+          sidebar.classList.remove('open');
+        }
+      });
+
+      // Active Link
+      const currentPath = window.location.pathname;
+      document.querySelectorAll('.nav a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPath || (currentPath === '/' && href === '/')) {
+          link.classList.add('active');
+        }
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    /* Dark Olive Theme - Light Mode */
+    --color-primary: #5a7033;
+    --color-primary-dark: #475a28;
+    --color-primary-light: #729445;
+    --color-accent: #8FBC8F;
+
+    --color-bg: #f5f7f3;
+    --color-bg-secondary: #ffffff;
+    --color-bg-tertiary: #f9faf8;
+    --color-text: #2a3218;
+    --color-text-secondary: #546045;
+    --color-text-muted: #738069;
+    --color-border: #dce2d4;
+    --color-hover: #f0f4eb;
+
+    --color-code-bg: #2a3218;
+    --color-code-text: #f9faf8;
+
+    --shadow-sm: 0 1px 3px rgba(85, 107, 47, 0.08);
+    --shadow-md: 0 4px 8px rgba(85, 107, 47, 0.12);
+    --shadow-lg: 0 10px 20px rgba(85, 107, 47, 0.15);
+  }
+
+  [data-theme="dark"] {
+    /* Dark Olive Theme - Dark Mode */
+    --color-primary: #A8D89F;
+    --color-primary-dark: #c2e8b8;
+    --color-primary-light: #8ec785;
+    --color-accent: #7A9B5A;
+
+    --color-bg: #1a1f16;
+    --color-bg-secondary: #242b1f;
+    --color-bg-tertiary: #2d3528;
+    --color-text: #ffffff;
+    --color-text-secondary: #ffffff;
+    --color-text-muted: #c5d1bb;
+    --color-border: #404a38;
+    --color-hover: #323b2a;
+
+    --color-code-bg: #14180f;
+    --color-code-text: #ffffff;
+
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--color-text);
+    background: var(--color-bg);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Khmer Font */
+  html[lang="km"] {
+    font-family: 'Koh Santepheap', serif;
+  }
+
+  /* English Font */
+  html[lang="en"] {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* Code always uses monospace */
+  code, pre {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-areas:
+      "header header"
+      "sidebar main";
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 64px 1fr;
+    min-height: 100vh;
+  }
+
+  .header {
+    grid-area: header;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .logo:hover {
+    opacity: 0.8;
+  }
+
+  .logo svg {
+    color: var(--color-primary);
+  }
+
+  .logo-text {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: -0.5px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .theme-toggle,
+  .lang-toggle {
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 10px 14px;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .theme-toggle:hover,
+  .lang-toggle:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .theme-toggle:active,
+  .lang-toggle:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .sun-icon {
+    display: none;
+    animation: rotate-in 0.3s ease;
+  }
+
+  .moon-icon {
+    display: block;
+    animation: rotate-in 0.3s ease;
+  }
+
+  [data-theme="dark"] .sun-icon {
+    display: block;
+  }
+
+  [data-theme="dark"] .moon-icon {
+    display: none;
+  }
+
+  @keyframes rotate-in {
+    from {
+      transform: rotate(-180deg);
+      opacity: 0;
+    }
+    to {
+      transform: rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  .lang-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .theme-toggle svg,
+  .lang-toggle svg {
+    transition: transform 0.3s ease;
+  }
+
+  .theme-toggle:hover svg,
+  .lang-toggle:hover svg {
+    transform: scale(1.1);
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--color-text);
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+    background: var(--color-bg-secondary);
+    border-right: 1px solid var(--color-border);
+    overflow-y: auto;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+  }
+
+  .nav {
+    padding: 32px 24px;
+  }
+
+  .nav-section {
+    margin-bottom: 32px;
+  }
+
+  .nav-section h3 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin: 0 0 12px 0;
+  }
+
+  .nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav li {
+    margin-bottom: 4px;
+  }
+
+  .nav a {
+    display: block;
+    padding: 8px 12px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .nav a:hover {
+    background: var(--color-hover);
+    color: var(--color-text);
+  }
+
+  .nav a.active {
+    background: var(--color-primary);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .main {
+    grid-area: main;
+    overflow-y: auto;
+    background: var(--color-bg);
+  }
+
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  /* Content Styling */
+  .content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  .content h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  .content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+  }
+
+  .content p {
+    margin-bottom: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.8;
+  }
+
+  .content article p {
+    color: var(--color-text-secondary);
+  }
+
+  .content ul, .content ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+    color: var(--color-text-secondary);
+  }
+
+  .content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+
+  .content strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .content code {
+    background: var(--color-bg-tertiary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--color-primary);
+  }
+
+  .content pre {
+    background: var(--color-code-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .content pre code {
+    background: none;
+    padding: 0;
+    color: var(--color-code-text);
+    border-radius: 0;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .content .section {
+    margin-bottom: 3rem;
+  }
+
+  .content a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .content a:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .layout {
+      grid-template-areas:
+        "header"
+        "main";
+      grid-template-columns: 1fr;
+      grid-template-rows: 64px 1fr;
+    }
+
+    .mobile-menu-btn {
+      display: block;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      bottom: 0;
+      width: 280px;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 50;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .content {
+      padding: 32px 16px;
+    }
+
+    .content h1 {
+      font-size: 2rem;
+    }
+
+    .content h2 {
+      font-size: 1.5rem;
+    }
+  }
+</style>

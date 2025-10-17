@@ -1,0 +1,188 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="Python Architecture" data-km="ស្ថាបត្យកម្ម Python">ស្ថាបត្យកម្ម Python</h1>
+    <p class="lead" data-en="Understand the structure and principles of Python application architecture." data-km="យល់ដឹងពីរចនាសម្ព័ន្ធនិងគោលការណ៍នៃស្ថាបត្យកម្មកម្មវិធី Python។">យល់ដឹងពីរចនាសម្ព័ន្ធនិងគោលការណ៍នៃស្ថាបត្យកម្មកម្មវិធី Python។</p>
+
+    <section class="section">
+      <h2 data-en="Overview" data-km="ទិដ្ឋភាពទូទៅ">ទិដ្ឋភាពទូទៅ</h2>
+      <p data-en="Python is a programming language with simple and efficient architecture. It uses Object-Oriented Programming (OOP) and Functional Programming patterns." data-km="Python គឺជាភាសាកម្មវិធីដែលមានស្ថាបត្យកម្មសាមញ្ញនិងមានប្រសិទ្ធភាព។ វាប្រើគំរូ Object-Oriented Programming (OOP) និង Functional Programming។">Python គឺជាភាសាកម្មវិធីដែលមានស្ថាបត្យកម្មសាមញ្ញនិងមានប្រសិទ្ធភាព។ វាប្រើគំរូ Object-Oriented Programming (OOP) និង Functional Programming។</p>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Basic Architecture" data-km="ស្ថាបត្យកម្មមូលដ្ឋាន">ស្ថាបត្យកម្មមូលដ្ឋាន</h2>
+      <p data-en="A typical Python application has the following structure" data-km="កម្មវិធី Python ធម្មតាមានរចនាសម្ព័ន្ធដូចខាងក្រោម">កម្មវិធី Python ធម្មតាមានរចនាសម្ព័ន្ធដូចខាងក្រោម</p>
+      <pre><code>my_project/
+├── src/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   └── user.py
+│   ├── controllers/
+│   │   ├── __init__.py
+│   │   └── user_controller.py
+│   └── utils/
+│       ├── __init__.py
+│       └── helpers.py
+├── tests/
+│   ├── __init__.py
+│   └── test_user.py
+├── requirements.txt
+└── README.md</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="MVC Pattern (Model-View-Controller)" data-km="គំរូ MVC (Model-View-Controller)">គំរូ MVC (Model-View-Controller)</h2>
+      <p data-en="Python supports MVC pattern for building maintainable applications" data-km="Python គាំទ្រគំរូ MVC សម្រាប់បង្កើតកម្មវិធីដែលងាយស្រួលថែទាំ">Python គាំទ្រគំរូ MVC សម្រាប់បង្កើតកម្មវិធីដែលងាយស្រួលថែទាំ</p>
+
+      <h3 data-en="Model (Data Model)" data-km="Model (គំរូទិន្នន័យ)">Model (គំរូទិន្នន័យ)</h3>
+      <pre><code># models/user.py
+class User:
+    def __init__(self, id, name, email):
+        self.id = id
+        self.name = name
+        self.email = email
+
+    def save(self):
+        # រក្សាទុកទិន្នន័យក្នុងមូលដ្ឋានទិន្នន័យ
+        pass
+
+    @staticmethod
+    def find_by_id(user_id):
+        # ស្វែងរកអ្នកប្រើប្រាស់តាមលេខសម្គាល់
+        pass</code></pre>
+
+      <h3 data-en="Controller" data-km="Controller (តួគ្រប់គ្រង)">Controller (តួគ្រប់គ្រង)</h3>
+      <pre><code># controllers/user_controller.py
+from models.user import User
+
+class UserController:
+    def get_user(self, user_id):
+        user = User.find_by_id(user_id)
+        return user
+
+    def create_user(self, name, email):
+        user = User(None, name, email)
+        user.save()
+        return user</code></pre>
+
+      <h3 data-en="View" data-km="View (ទិដ្ឋភាព)">View (ទិដ្ឋភាព)</h3>
+      <pre><code># views/user_view.py
+def render_user(user):
+    return f"""
+    &lt;div class="user"&gt;
+        &lt;h2&gt;&#123;user.name&#125;&lt;/h2&gt;
+        &lt;p&gt;&#123;user.email&#125;&lt;/p&gt;
+    &lt;/div&gt;
+    """</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Modules and Packages" data-km="Modules និង Packages">Modules និង Packages</h2>
+      <p data-en="Python uses modules and packages to organize code" data-km="Python ប្រើ modules និង packages ដើម្បីរៀបចំកូដ">Python ប្រើ modules និង packages ដើម្បីរៀបចំកូដ</p>
+      <pre><code># src/__init__.py file
+
+from .models import User
+from .controllers import UserController
+
+__all__ = ['User', 'UserController']</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Web Application Architecture" data-km="ស្ថាបត្យកម្មកម្មវិធីបណ្តាញ">ស្ថាបត្យកម្មកម្មវិធីបណ្តាញ</h2>
+      <p data-en="For web applications, you can use Flask or Django" data-km="សម្រាប់កម្មវិធីបណ្តាញ អ្នកអាចប្រើ Flask ឬ Django">សម្រាប់កម្មវិធីបណ្តាញ អ្នកអាចប្រើ Flask ឬ Django</p>
+      <pre><code># Flask Application Architecture
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route('/api/users/&lt;int:user_id&gt;')
+def get_user(user_id):
+    # ទាញយកទិន្នន័យអ្នកប្រើប្រាស់
+    user = &#123;"id": user_id, "name": "John"&#125;
+    return jsonify(user)
+
+if __name__ == '__main__':
+    app.run(debug=True)</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 24px 0 12px 0;
+    color: #111827;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

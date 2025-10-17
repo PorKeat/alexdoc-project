@@ -1,0 +1,265 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="Quick Start with Python" data-km="ការចាប់ផ្តើមលឿនជាមួយ Python">ការចាប់ផ្តើមលឿនជាមួយ Python</h1>
+    <p class="lead" data-en="Start writing your first Python program in just a few minutes." data-km="ចាប់ផ្តើមសរសេរកម្មវិធី Python ទីមួយរបស់អ្នកក្នុងរយៈពេលប៉ុន្មាននាទី។">ចាប់ផ្តើមសរសេរកម្មវិធី Python ទីមួយរបស់អ្នកក្នុងរយៈពេលប៉ុន្មាននាទី។</p>
+
+    <section class="section">
+      <h2 data-en="Basic Setup" data-km="ការរៀបចំមូលដ្ឋាន">ការរៀបចំមូលដ្ឋាន</h2>
+      <p data-en="After installation, let's write your first Python program" data-km="បន្ទាប់ពីដំឡើង មកសរសេរកម្មវិធី Python ទីមួយរបស់អ្នក">បន្ទាប់ពីដំឡើង មកសរសេរកម្មវិធី Python ទីមួយរបស់អ្នក</p>
+
+      <div class="step">
+        <h3 data-en="Step 1: Create Your First File" data-km="ជំហាន១: បង្កើតឯកសារទីមួយ">ជំហាន១: បង្កើតឯកសារទីមួយ</h3>
+        <p data-en="Create a simple Python file" data-km="បង្កើតឯកសារធម្មតា Python">បង្កើតឯកសារធម្មតា Python <code class="inline-code">hello.py</code>:</p>
+        <pre><code># hello.py
+def greet(name):
+    return f"ស្វាគម៑, &#123;name&#125;!"
+
+if __name__ == "__main__":
+    print(greet("អ្នកប្រើ Python"))
+    print("នេះគឺជាកម្មវិធីទីមួយរបស់អ្នក!")</code></pre>
+        <p data-en="Run the program:" data-km="រត់កម្មវិធី:">រត់កម្មវិធី:</p>
+        <pre><code>python hello.py</code></pre>
+      </div>
+
+      <div class="step">
+        <h3 data-en="Step 2: Create Classes and Objects" data-km="ជំហាន២: បង្កើត Class និង Object">ជំហាន២: បង្កើត Class និង Object</h3>
+        <p data-en="Learn about Object-Oriented Programming" data-km="ស្វែងយល់ពី Object-Oriented Programming">ស្វែងយល់ពី Object-Oriented Programming</p>
+        <pre><code># user.py
+class User:
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+
+    def introduce(self):
+        return f"ខ្ញុំជា &#123;self.name&#125;, អ៊ីមែលពី &#123;self.email&#125;"
+
+# ប្រើ class
+user1 = User("សុកន្ធា", "sokna@example.com")
+print(user1.introduce())</code></pre>
+      </div>
+
+      <div class="step">
+        <h3 data-en="Step 3: Working with Files and Data" data-km="ជំហាន៣: ធ្វើការជាមួយឯកសារនិងទិន្នន័យ">ជំហាន៣: ធ្វើការជាមួយឯកសារនិងទិន្នន័យ</h3>
+        <p data-en="Build modular code structure" data-km="រៀបចំរចនាសម្ព័ន្ធកូដជាមូលដ្ឋាន">រៀបចំរចនាសម្ព័ន្ធកូដជាមូលដ្ឋាន</p>
+        <pre><code># calculator.py
+class Calculator:
+    def add(self, a, b):
+        return a + b
+
+    def subtract(self, a, b):
+        return a - b
+
+    def multiply(self, a, b):
+        return a * b
+
+    def divide(self, a, b):
+        if b == 0:
+            return "មិនអាចចែកដោយសូន្យ"
+        return a / b
+
+# ប្រើឯកសារ
+calc = Calculator()
+print(f"10 + 5 = &#123;calc.add(10, 5)&#125;")
+print(f"10 - 5 = &#123;calc.subtract(10, 5)&#125;")
+print(f"10 * 5 = &#123;calc.multiply(10, 5)&#125;")
+print(f"10 / 5 = &#123;calc.divide(10, 5)&#125;")</code></pre>
+      </div>
+
+      <div class="step">
+        <h3 data-en="Step 4: Working with Multiple Files" data-km="ជំហាន៤: ដំណើរការជាមួយឯកសារច្រើន">ជំហាន៤: ដំណើរការជាមួយឯកសារច្រើន</h3>
+        <p data-en="Create an application that uses other files" data-km="បង្កើតកម្មវិធីដែលប្រើឯកសារផ្សេងទៀត">បង្កើតកម្មវិធីដែលប្រើឯកសារផ្សេងទៀត</p>
+        <pre><code># main.py
+from user import User
+from calculator import Calculator
+
+print("ស្វាគម៑មកកាន់កម្មវិធី Python របស់អ្នក!")
+print("="*40)
+
+# ប្រើ User class
+user = User("ដារ៉ា", "dara@example.com")
+print(user.introduce())
+
+# ប្រើ Calculator
+calc = Calculator()
+result = calc.add(100, 50)
+print(f"\nលទ្ធផលដំណើរការ = &#123;result&#125;")</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 data-en="What's Next?" data-km="បន្ទាប់មកគឺអ្វី?">បន្ទាប់មកគឺអ្វី?</h2>
+      <div class="next-steps">
+        <a href="/architecture" class="next-step-card">
+          <h3 data-en="Architecture" data-km="ស្ថាបត្យកម្ម">ស្ថាបត្យកម្ម</h3>
+          <p data-en="Understand system structure" data-km="យល់ដឹងពីរចនាសម្ព័ន្ធរបស់ប្រព័ន្ធ">យល់ដឹងពីរចនាសម្ព័ន្ធរបស់ប្រព័ន្ធ</p>
+        </a>
+        <a href="/components" class="next-step-card">
+          <h3 data-en="Components" data-km="សមាសធាតុ">សមាសធាតុ</h3>
+          <p data-en="Explore Python components and patterns" data-km="ស្វែងរកសមាសធាតុនិងគំរូ Python">ស្វែងរកសមាសធាតុនិងគំរូ Python</p>
+        </a>
+        <a href="/api/overview" class="next-step-card">
+          <h3 data-en="API Reference" data-km="សេចក្តីយោង API">សេចក្តីយោង API</h3>
+          <p data-en="Detailed Python API documentation" data-km="ឯកសារ API លម្អិតរបស់ Python">ឯកសារ API លម្អិតរបស់ Python</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Common Issues" data-km="បញ្ហាទូទៅ">បញ្ហាទូទៅ</h2>
+      <div class="alert">
+        <h3 data-en="Installation Errors?" data-km="កំហុសក្នុងការដំឡើង?">កំហុសក្នុងការដំឡើង?</h3>
+        <p data-en="If you have Python errors, check that pip is working correctly" data-km="ប្រសិនបើមានកំហុស Python សូមពិនិត្យថាមាន pip ដំណើរការត្រឹមត្រូវ">ប្រសិនបើមានកំហុស Python សូមពិនិត្យថាមាន pip ដំណើរការត្រឹមត្រូវ</p>
+        <pre><code># ពិនិត្យកំណែ pip
+pip --version
+
+# ដំឡើងកញ្ចប់
+ip install package_name</code></pre>
+      </div>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #111827;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .step {
+    margin-bottom: 32px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+  }
+
+  .inline-code {
+    background: #f3f4f6;
+    color: #1f2937;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .next-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .next-step-card {
+    padding: 20px;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .next-step-card:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .next-step-card h3 {
+    color: #2563eb;
+    margin: 0 0 8px 0;
+    font-size: 18px;
+  }
+
+  .next-step-card p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .alert {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 16px 20px;
+    border-radius: 4px;
+  }
+
+  .alert h3 {
+    margin-top: 0;
+    color: #1e40af;
+    font-size: 18px;
+  }
+
+  .alert p {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+
+    .next-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,287 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="Python Application Deployment" data-km="ការដាក់ពង្រាយកម្មវិធី Python">ការដាក់ពង្រាយកម្មវិធី Python</h1>
+    <p class="lead" data-en="Learn how to deploy your Python application to production." data-km="រៀនពីរបៀបដាក់ពង្រាយកម្មវិធី Python របស់អ្នកទៅផលិតកម្ម។">រៀនពីរបៀបដាក់ពង្រាយកម្មវិធី Python របស់អ្នកទៅផលិតកម្ម។</p>
+
+    <section class="section">
+      <h2 data-en="Prepare for Deployment" data-km="រៀបចំសម្រាប់ដាក់ពង្រាយ">រៀបចំសម្រាប់ដាក់ពង្រាយ</h2>
+      <p data-en="Before deploying, prepare the necessary files" data-km="មុននឹងដាក់ពង្រាយ ត្រូវរៀបចំឯកសារចាំបាច់">មុននឹងដាក់ពង្រាយ ត្រូវរៀបចំឯកសារចាំបាច់</p>
+      <pre><code># requirements.txt - បញ្ជីកញ្ចប់ទាំងអស់
+flask==2.3.0
+sqlalchemy==2.0.15
+gunicorn==21.2.0
+python-dotenv==1.0.0
+
+# .env - អថេរបរិស្ថាន (កុំផ្ញើទៅ git!)
+DATABASE_URL=postgresql://user:pass@localhost/db
+SECRET_KEY=your-secret-key-here
+DEBUG=False
+
+# .gitignore - ឯកសារមិនត្រូវផ្ញើទៅ git
+__pycache__/
+*.pyc
+.env
+venv/
+*.db</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Deploy on Heroku" data-km="ដាក់ពង្រាយលើ Heroku">ដាក់ពង្រាយលើ Heroku</h2>
+      <p data-en="Heroku is a simple cloud platform for deployment" data-km="Heroku គឺជាវេទិកា cloud សាមញ្ញសម្រាប់ដាក់ពង្រាយ">Heroku គឺជាវេទិកា cloud សាមញ្ញសម្រាប់ដាក់ពង្រាយ</p>
+      <pre><code># បង្កើត Procfile
+web: gunicorn app:app
+
+# បង្កើត runtime.txt
+python-3.11.0
+
+# ដំឡើង Heroku CLI និងចូលប្រើប្រាស់
+# heroku login
+
+# បង្កើតកម្មវិធីថ្មី
+# heroku create my-python-app
+
+# បន្ថែម PostgreSQL
+# heroku addons:create heroku-postgresql:hobby-dev
+
+# កំណត់អថេរបរិស្ថាន
+# heroku config:set SECRET_KEY=your-secret-key
+
+# ដាក់ពង្រាយកូដ
+# git push heroku main
+
+# មើលកំណត់ហេតុ
+# heroku logs --tail</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Deploy on DigitalOcean" data-km="ដាក់ពង្រាយលើ DigitalOcean">ដាក់ពង្រាយលើ DigitalOcean</h2>
+      <p data-en="Deploy on droplet using Nginx and Gunicorn" data-km="ដាក់ពង្រាយលើ droplet ដោយប្រើ Nginx និង Gunicorn">ដាក់ពង្រាយលើ droplet ដោយប្រើ Nginx និង Gunicorn</p>
+      <pre><code># 1. បង្កើត droplet និងភ្ជាប់តាម SSH
+ssh root@your-server-ip
+
+# 2. ដំឡើង Python និងកញ្ចប់
+sudo apt update
+sudo apt install python3 python3-pip python3-venv nginx
+
+# 3. បង្កើតបរិស្ថានកម្មវិធី
+mkdir /var/www/myapp
+cd /var/www/myapp
+python3 -m venv venv
+source venv/bin/activate
+
+# 4. ដំឡើងកញ្ចប់
+pip install -r requirements.txt
+
+# 5. កំណត់រចនាសម្ព័ន្ធ Gunicorn
+# /etc/systemd/system/myapp.service
+[Unit]
+Description=Gunicorn instance for myapp
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/myapp
+Environment="PATH=/var/www/myapp/venv/bin"
+ExecStart=/var/www/myapp/venv/bin/gunicorn --workers 3 --bind unix:myapp.sock -m 007 app:app
+
+[Install]
+WantedBy=multi-user.target
+
+# 6. ចាប់ផ្តើម Gunicorn
+sudo systemctl start myapp
+sudo systemctl enable myapp</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Nginx Configuration" data-km="រចនាសម្ព័ន្ធ Nginx">រចនាសម្ព័ន្ធ Nginx</h2>
+      <p data-en="Configure Nginx as reverse proxy" data-km="កំណត់រចនាសម្ព័ន្ធ Nginx ជា reverse proxy">កំណត់រចនាសម្ព័ន្ធ Nginx ជា reverse proxy</p>
+      <pre><code># /etc/nginx/sites-available/myapp
+server &#123;
+    listen 80;
+    server_name your-domain.com;
+
+    location / &#123;
+        proxy_pass http://unix:/var/www/myapp/myapp.sock;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    &#125;
+
+    location /static &#123;
+        alias /var/www/myapp/static;
+    &#125;
+&#125;
+
+# បើកដំណើរការរចនាសម្ព័ន្ធ
+sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl restart nginx</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="SSL with Let's Encrypt" data-km="SSL ជាមួយ Let's Encrypt">SSL ជាមួយ Let's Encrypt</h2>
+      <p data-en="Add HTTPS using free certificates" data-km="បន្ថែម HTTPS ដោយប្រើវិញ្ញាបនប័ត្រឥតគិតថ្លៃ">បន្ថែម HTTPS ដោយប្រើវិញ្ញាបនប័ត្រឥតគិតថ្លៃ</p>
+      <pre><code># ដំឡើង Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# ទទួលយកវិញ្ញាបនប័ត្រ
+sudo certbot --nginx -d your-domain.com
+
+# វិញ្ញាបនប័ត្រនឹងបន្តដោយស្វ័យប្រវត្តិ
+# ពិនិត្យការបន្ត
+sudo certbot renew --dry-run</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Docker Deployment" data-km="Docker Deployment">Docker Deployment</h2>
+      <p data-en="Deploy with Docker containers" data-km="ដាក់ពង្រាយជាមួយ Docker containers">ដាក់ពង្រាយជាមួយ Docker containers</p>
+      <pre><code># Dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "app:app"]
+
+# docker-compose.yml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:pass@db:5432/myapp
+      - SECRET_KEY=$&#123;SECRET_KEY&#125;
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=myapp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+# ប្រើ Docker Compose
+docker-compose up -d
+docker-compose logs -f</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Monitoring and Logging" data-km="Monitoring និង Logging">Monitoring និង Logging</h2>
+      <p data-en="Monitor your application in production" data-km="តាមដានកម្មវិធីរបស់អ្នកនៅក្នុងផលិតកម្ម">តាមដានកម្មវិធីរបស់អ្នកនៅក្នុងផលិតកម្ម</p>
+      <pre><code># កំណត់រចនាសម្ព័ន្ធ logging
+import logging
+from logging.handlers import RotatingFileHandler
+
+def setup_logging(app):
+    handler = RotatingFileHandler(
+        'app.log',
+        maxBytes=10000000,
+        backupCount=5
+    )
+    handler.setLevel(logging.INFO)
+    formatter = logging.Formatter(
+        '[%(asctime)s] %(levelname)s: %(message)s'
+    )
+    handler.setFormatter(formatter)
+    app.logger.addHandler(handler)
+
+# ប្រើ logging
+app.logger.info('កម្មវិធីបានចាប់ផ្តើម')
+app.logger.error('កំហុសមួយបានកើតឡើង')
+
+# រៀបចំ health check endpoint
+@app.route('/health')
+def health_check():
+    return &#123;'status': 'healthy'&#125;, 200</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

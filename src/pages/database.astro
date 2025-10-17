@@ -1,0 +1,320 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="Working with Databases" data-km="ការធ្វើការជាមួយមូលដ្ឋានទិន្នន័យ">ការធ្វើការជាមួយមូលដ្ឋានទិន្នន័យ</h1>
+    <p class="lead" data-en="Learn how to work with databases in Python." data-km="រៀនពីរបៀបធ្វើការជាមួយមូលដ្ឋានទិន្នន័យនៅក្នុង Python។">រៀនពីរបៀបធ្វើការជាមួយមូលដ្ឋានទិន្នន័យនៅក្នុង Python។</p>
+
+    <section class="section">
+      <h2 data-en="SQLite - Basic Database" data-km="SQLite - មូលដ្ឋានទិន្នន័យមូលដ្ឋាន">SQLite - មូលដ្ឋានទិន្នន័យមូលដ្ឋាន</h2>
+      <p data-en="SQLite is a simple embedded database in Python:" data-km="SQLite គឺជាមូលដ្ឋានទិន្នន័យសាមញ្ញដែលបង្កប់ក្នុង Python:">SQLite គឺជាមូលដ្ឋានទិន្នន័យសាមញ្ញដែលបង្កប់ក្នុង Python:</p>
+      <pre><code>import sqlite3
+
+# ភ្ជាប់ទៅមូលដ្ឋានទិន្នន័យ
+conn = sqlite3.connect('myapp.db')
+cursor = conn.cursor()
+
+# បង្កើតតារាង
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+''')
+
+# បញ្ចូលទិន្នន័យ
+cursor.execute(
+    'INSERT INTO users (name, email) VALUES (?, ?)',
+    ('Alice', 'alice@example.com')
+)
+conn.commit()
+
+# សួរទិន្នន័យ
+cursor.execute('SELECT * FROM users')
+users = cursor.fetchall()
+for user in users:
+    print(user)
+
+conn.close()</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="CRUD Operations" data-km="ប្រតិបត្តិការ CRUD">ប្រតិបត្តិការ CRUD</h2>
+      <p data-en="Basic Create, Read, Update, Delete operations" data-km="ប្រតិបត្តិការមូលដ្ឋាន Create, Read, Update, Delete">ប្រតិបត្តិការមូលដ្ឋាន Create, Read, Update, Delete</p>
+      <pre><code>import sqlite3
+
+class UserDatabase:
+    def __init__(self, db_path='users.db'):
+        self.conn = sqlite3.connect(db_path)
+        self.conn.row_factory = sqlite3.Row
+        self.cursor = self.conn.cursor()
+
+    # CREATE - បង្កើត
+    def create_user(self, name, email):
+        self.cursor.execute(
+            'INSERT INTO users (name, email) VALUES (?, ?)',
+            (name, email)
+        )
+        self.conn.commit()
+        return self.cursor.lastrowid
+
+    # READ - អាន
+    def get_user(self, user_id):
+        self.cursor.execute(
+            'SELECT * FROM users WHERE id = ?',
+            (user_id,)
+        )
+        return self.cursor.fetchone()
+
+    def get_all_users(self):
+        self.cursor.execute('SELECT * FROM users')
+        return self.cursor.fetchall()
+
+    # UPDATE - ធ្វើបច្ចុប្បន្នភាព
+    def update_user(self, user_id, name, email):
+        self.cursor.execute(
+            'UPDATE users SET name = ?, email = ? WHERE id = ?',
+            (name, email, user_id)
+        )
+        self.conn.commit()
+
+    # DELETE - លុប
+    def delete_user(self, user_id):
+        self.cursor.execute(
+            'DELETE FROM users WHERE id = ?',
+            (user_id,)
+        )
+        self.conn.commit()
+
+# ប្រើ class
+db = UserDatabase()
+user_id = db.create_user('Bob', 'bob@example.com')
+user = db.get_user(user_id)
+print(dict(user))</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="PostgreSQL with psycopg2" data-km="PostgreSQL ជាមួយ psycopg2">PostgreSQL ជាមួយ psycopg2</h2>
+      <p data-en="Working with PostgreSQL database" data-km="ធ្វើការជាមួយមូលដ្ឋានទិន្នន័យ PostgreSQL">ធ្វើការជាមួយមូលដ្ឋានទិន្នន័យ PostgreSQL</p>
+      <pre><code>import psycopg2
+from psycopg2.extras import RealDictCursor
+
+# ភ្ជាប់ទៅ PostgreSQL
+conn = psycopg2.connect(
+    host="localhost",
+    database="myapp",
+    user="postgres",
+    password="password"
+)
+
+cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+# បង្កើតតារាង
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        price DECIMAL(10, 2) NOT NULL,
+        stock INTEGER DEFAULT 0
+    )
+''')
+
+# បញ្ចូលទិន្នន័យ
+cursor.execute(
+    'INSERT INTO products (name, price, stock) VALUES (%s, %s, %s)',
+    ('Laptop', 999.99, 10)
+)
+conn.commit()
+
+# សួរទិន្នន័យ
+cursor.execute('SELECT * FROM products WHERE price > %s', (500,))
+products = cursor.fetchall()
+for product in products:
+    print(product)
+
+cursor.close()
+conn.close()</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="SQLAlchemy ORM" data-km="SQLAlchemy ORM">SQLAlchemy ORM</h2>
+      <p data-en="Use Object-Relational Mapping for databases" data-km="ប្រើ Object-Relational Mapping សម្រាប់មូលដ្ឋានទិន្នន័យ">ប្រើ Object-Relational Mapping សម្រាប់មូលដ្ឋានទិន្នន័យ</p>
+      <pre><code>from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+# កំណត់មូលដ្ឋានទិន្នន័យ
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f"&lt;User(name='&#123;self.name&#125;', email='&#123;self.email&#125;')&gt;"
+
+# បង្កើត engine និង session
+engine = create_engine('sqlite:///myapp.db')
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# បង្កើតអ្នកប្រើប្រាស់
+new_user = User(name='Charlie', email='charlie@example.com')
+session.add(new_user)
+session.commit()
+
+# សួរទិន្នន័យ
+users = session.query(User).filter(User.name.like('C%')).all()
+for user in users:
+    print(user)
+
+# ធ្វើបច្ចុប្បន្នភាព
+user = session.query(User).filter_by(email='charlie@example.com').first()
+user.name = 'Charles'
+session.commit()
+
+# លុប
+session.delete(user)
+session.commit()</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="MongoDB with PyMongo" data-km="MongoDB ជាមួយ PyMongo">MongoDB ជាមួយ PyMongo</h2>
+      <p data-en="Working with NoSQL database" data-km="ធ្វើការជាមួយមូលដ្ឋានទិន្នន័យ NoSQL">ធ្វើការជាមួយមូលដ្ឋានទិន្នន័យ NoSQL</p>
+      <pre><code>from pymongo import MongoClient
+from datetime import datetime
+
+# ភ្ជាប់ទៅ MongoDB
+client = MongoClient('mongodb://localhost:27017/')
+db = client['myapp']
+users_collection = db['users']
+
+# បញ្ចូលឯកសារ
+user = &#123;
+    'name': 'David',
+    'email': 'david@example.com',
+    'age': 30,
+    'created_at': datetime.utcnow()
+&#125;
+result = users_collection.insert_one(user)
+print(f"បានបញ្ចូល ID &#123;result.inserted_id&#125;")
+
+# រកឯកសារ
+user = users_collection.find_one(&#123;'email': 'david@example.com'&#125;)
+print(user)
+
+# ធ្វើបច្ចុប្បន្នភាពឯកសារ
+users_collection.update_one(
+    &#123;'email': 'david@example.com'&#125;,
+    &#123;'$set': &#123;'age': 31&#125;&#125;
+)
+
+# លុបឯកសារ
+users_collection.delete_one(&#123;'email': 'david@example.com'&#125;)
+
+# រកច្រើនឯកសារ
+users = users_collection.find(&#123;'age': &#123;'$gte': 25&#125;&#125;)
+for user in users:
+    print(user)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Database Connection Pool" data-km="Database Connection Pool">Database Connection Pool</h2>
+      <p data-en="Manage database connections efficiently" data-km="គ្រប់គ្រងការភ្ជាប់មូលដ្ឋានទិន្នន័យប្រកបដោយប្រសិទ្ធភាព">គ្រប់គ្រងការភ្ជាប់មូលដ្ឋានទិន្នន័យប្រកបដោយប្រសិទ្ធភាព</p>
+      <pre><code>from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
+
+# បង្កើត connection pool
+engine = create_engine(
+    'postgresql://user:password@localhost/myapp',
+    poolclass=QueuePool,
+    pool_size=10,        # ចំនួនការភ្ជាប់អចិន្ត្រៃយ៍
+    max_overflow=20,     # ការភ្ជាប់បន្ថែមអតិបរមា
+    pool_timeout=30,     # ពេលវេលារង់ចាំ (វិនាទី)
+    pool_recycle=3600    # ប្តូរការភ្ជាប់ចាស់ (វិនាទី)
+)
+
+# ប្រើ connection
+with engine.connect() as conn:
+    result = conn.execute('SELECT * FROM users')
+    for row in result:
+        print(row)</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

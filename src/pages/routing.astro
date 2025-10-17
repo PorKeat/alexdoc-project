@@ -1,0 +1,255 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article>
+    <h1 data-en="Routing in Python" data-km="ការបញ្ជូនបន្ត (Routing) ក្នុង Python">ការបញ្ជូនបន្ត (Routing) ក្នុង Python</h1>
+    <p class="lead" data-en="Learn about routing and URL management in Python web applications." data-km="រៀនអំពីការបញ្ជូនបន្តនិងការគ្រប់គ្រង URL ក្នុងកម្មវិធីបណ្តាញ Python។">រៀនអំពីការបញ្ជូនបន្តនិងការគ្រប់គ្រង URL ក្នុងកម្មវិធីបណ្តាញ Python។</p>
+
+    <section class="section">
+      <h2 data-en="Flask Routing" data-km="Flask Routing">Flask Routing</h2>
+      <p data-en="Flask provides a simple and efficient routing system" data-km="Flask ផ្តល់នូវប្រព័ន្ធបញ្ជូនបន្តសាមញ្ញនិងប្រសិទ្ធភាព">Flask ផ្តល់នូវប្រព័ន្ធបញ្ជូនបន្តសាមញ្ញនិងប្រសិទ្ធភាព</p>
+      <pre><code>from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Route មូលដ្ឋាន
+@app.route('/')
+def home():
+    return 'ទំព័រដើម'
+
+# Route ជាមួយ parameters
+@app.route('/user/&lt;username&gt;')
+def show_user(username):
+    return f'ប្រវត្តិរូបរបស់ &#123;username&#125;'
+
+# Route ជាមួយប្រភេទ parameters
+@app.route('/post/&lt;int:post_id&gt;')
+def show_post(post_id):
+    return f'ប្រកាសលេខ &#123;post_id&#125;'
+
+if __name__ == '__main__':
+    app.run(debug=True)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="HTTP Methods" data-km="HTTP Methods">HTTP Methods</h2>
+      <p data-en="Handle different HTTP methods for RESTful APIs" data-km="គ្រប់គ្រងវិធីសាស្ត្រ HTTP ផ្សេងៗគ្នាសម្រាប់ RESTful APIs">គ្រប់គ្រងវិធីសាស្ត្រ HTTP ផ្សេងៗគ្នាសម្រាប់ RESTful APIs</p>
+      <pre><code>from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# GET Request
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    users = [
+        &#123;'id': 1, 'name': 'Alice'&#125;,
+        &#123;'id': 2, 'name': 'Bob'&#125;
+    ]
+    return jsonify(users)
+
+# POST Request
+@app.route('/api/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    new_user = &#123;
+        'id': 3,
+        'name': data.get('name'),
+        'email': data.get('email')
+    &#125;
+    return jsonify(new_user), 201
+
+# PUT Request
+@app.route('/api/users/&lt;int:user_id&gt;', methods=['PUT'])
+def update_user(user_id):
+    data = request.get_json()
+    return jsonify(&#123;
+        'id': user_id,
+        'name': data.get('name')
+    &#125;)
+
+# DELETE Request
+@app.route('/api/users/&lt;int:user_id&gt;', methods=['DELETE'])
+def delete_user(user_id):
+    return jsonify(&#123;'message': f'បានលុបអ្នកប្រើប្រាស់ &#123;user_id&#125;'&#125;)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Django URL Routing" data-km="Django URL Routing">Django URL Routing</h2>
+      <p data-en="Django uses URLconf system for routing" data-km="Django ប្រើប្រព័ន្ធ URLconf សម្រាប់ការបញ្ជូនបន្ត">Django ប្រើប្រព័ន្ធ URLconf សម្រាប់ការបញ្ជូនបន្ត</p>
+      <pre><code># urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('about/', views.about, name='about'),
+    path('user/&lt;int:user_id&gt;/', views.user_detail, name='user_detail'),
+    path('post/&lt;slug:slug&gt;/', views.post_detail, name='post_detail'),
+]
+
+# views.py
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
+
+def home(request):
+    return render(request, 'home.html')
+
+def user_detail(request, user_id):
+    user = &#123;'id': user_id, 'name': 'John'&#125;
+    return JsonResponse(user)
+
+def post_detail(request, slug):
+    return HttpResponse(f'ប្រកាសមួយ  &#123;slug&#125;')</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Route Parameters and Query Strings" data-km="Route Parameters និង Query Strings">Route Parameters និង Query Strings</h2>
+      <p data-en="Routes can receive parameters from path and query string" data-km="ការបញ្ជូនបន្តអាចទទួល parameters ពីផ្លូវនិងខ្សែសំណួរ">ការបញ្ជូនបន្តអាចទទួល parameters ពីផ្លូវនិងខ្សែសំណួរ</p>
+      <pre><code>from flask import Flask, request
+
+app = Flask(__name__)
+
+# URL Parameters
+@app.route('/search/&lt;category&gt;/&lt;keyword&gt;')
+def search(category, keyword):
+    return f'ស្វែងរក &#123;keyword&#125; ក្នុង &#123;category&#125;'
+
+# Query Parameters
+@app.route('/filter')
+def filter_items():
+    # URL: /filter?price=100&color=red
+    price = request.args.get('price')
+    color = request.args.get('color')
+    return f'តម្រង  តម្លៃ=&#123;price&#125;, ពណ៌=&#123;color&#125;'
+
+# ផ្សំទាំងពីរ
+@app.route('/products/&lt;category&gt;')
+def products(category):
+    # URL: /products/electronics?sort=price&order=asc
+    sort_by = request.args.get('sort', 'name')
+    order = request.args.get('order', 'asc')
+    return f'ផលិតផល &#123;category&#125;, តម្រៀបតាម &#123;sort_by&#125; (&#123;order&#125;)'</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Blueprint Routing (Flask)" data-km="Blueprint Routing (Flask)">Blueprint Routing (Flask)</h2>
+      <p data-en="Blueprints help organize routes in large applications" data-km="Blueprints ជួយរៀបចំ routes ក្នុងកម្មវិធីធំ">Blueprints ជួយរៀបចំ routes ក្នុងកម្មវិធីធំ</p>
+      <pre><code># auth_blueprint.py
+from flask import Blueprint, jsonify
+
+auth = Blueprint('auth', __name__, url_prefix='/auth')
+
+@auth.route('/login', methods=['POST'])
+def login():
+    return jsonify(&#123;"message": "ចូលប្រើប្រាស់ដោយជោគជ័យ"&#125;)
+
+@auth.route('/register', methods=['POST'])
+def register():
+    return jsonify(&#123;"message": "ចុះឈ្មោះដោយជោគជ័យ"&#125;)
+
+# app.py
+from flask import Flask
+from auth_blueprint import auth
+
+app = Flask(__name__)
+app.register_blueprint(auth)
+
+# Routes:
+# POST /auth/login
+# POST /auth/register</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Error Handling" data-km="Error Handling">Error Handling</h2>
+      <p data-en="Handle errors and HTTP status codes" data-km="គ្រប់គ្រងកំហុសនិងស្ថានភាព HTTP">គ្រប់គ្រងកំហុសនិងស្ថានភាព HTTP</p>
+      <pre><code>from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify(&#123;"error": "រកមិនឃើញ"&#125;), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify(&#123;"error": "កំហុសម៉ាស៊ីនមេ"&#125;), 500
+
+# Custom error
+@app.route('/protected')
+def protected():
+    if not user_is_authenticated():
+        return jsonify(&#123;"error": "មិនមានការអនុញ្ញាត"&#125;), 401
+    return jsonify(&#123;"data": "ទិន្នន័យកំបាំង"&#125;)</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

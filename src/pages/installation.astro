@@ -1,0 +1,180 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="Python Installation" data-km="ការដំឡើង Python">ការដំឡើង Python</h1>
+    <p class="lead" data-en="Learn how to install and configure Python on your operating system." data-km="ស្វែងយល់ពីរបៀបដំឡើងនិងកំណត់រចនាសម្ព័ន្ធ Python លើប្រព័ន្ធប្រតិបត្តិការរបស់អ្នក។">ស្វែងយល់ពីរបៀបដំឡើងនិងកំណត់រចនាសម្ព័ន្ធ Python លើប្រព័ន្ធប្រតិបត្តិការរបស់អ្នក។</p>
+
+    <section class="section">
+      <h2 data-en="Prerequisites" data-km="តម្រូវការមុន">តម្រូវការមុន</h2>
+      <p data-en="Before you begin, make sure you have the following installed:" data-km="មុនពេលអ្នកចាប់ផ្តើម ត្រូវប្រាកដថាអ្នកបានដំឡើងអ្វីទាំងនេះរួចហើយ">មុនពេលអ្នកចាប់ផ្តើម ត្រូវប្រាកដថាអ្នកបានដំឡើងអ្វីទាំងនេះរួចហើយ</p>
+      <ul>
+        <li data-en="Python 3.8 or higher" data-km="Python 3.8 ឬខ្ពស់ជាងនេះ">Python 3.8 ឬខ្ពស់ជាងនេះ</li>
+        <li data-en="pip (package manager)" data-km="pip (កម្មវិធីគ្រប់គ្រងកញ្ចប់)">pip (កម្មវិធីគ្រប់គ្រងកញ្ចប់)</li>
+        <li data-en="virtualenv for creating isolated environments (recommended)" data-km="virtualenv សម្រាប់បង្កើតបរិស្ថាននិរទេស (បញ្ជាក់)">virtualenv សម្រាប់បង្កើតបរិស្ថាននិរទេស (បញ្ជាក់)</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Installation Steps" data-km="ជំហានដំឡើង">ជំហានដំឡើង</h2>
+
+      <div class="step">
+        <h3 data-en="1. Install Python on Windows" data-km="១. ដំឡើង Python លើ Windows">១. ដំឡើង Python លើ Windows</h3>
+        <p data-en="Download Python from the official website python.org" data-km="ទាញយក Python ពីវេបសាយផ្លូវការ python.org">ទាញយក Python ពីវេបសាយផ្លូវការ python.org</p>
+        <pre><code># ទាញយកពី https://www.python.org/downloads/
+# ដំឡើង Python installer សម្រាប់ Windows
+# រត់ធានា "Add Python to PATH" ពេលដំឡើង</code></pre>
+        <p data-en="After installation, verify the installation:" data-km="បន្ទាប់ពីដំឡើង ពិនិត្យមើលការដំឡើង">បន្ទាប់ពីដំឡើង ពិនិត្យមើលការដំឡើង</p>
+        <pre><code>python --version
+pip --version</code></pre>
+      </div>
+
+      <div class="step">
+        <h3 data-en="2. Install Python on macOS and Linux" data-km="២. ដំឡើង Python លើ macOS និង Linux">២. ដំឡើង Python លើ macOS និង Linux</h3>
+        <p data-en="Use Homebrew (macOS) or apt (Linux)" data-km="ប្រើ Homebrew (macOS) ឬ apt (Linux)">ប្រើ Homebrew (macOS) ឬ apt (Linux)</p>
+        <pre><code># macOS
+brew install python3
+
+# Ubuntu/Debian
+sudo apt update
+sudo apt install python3 python3-pip
+
+# ពិនិត្យមើលការដំឡើង
+python3 --version
+pip3 --version</code></pre>
+      </div>
+
+      <div class="step">
+        <h3 data-en="3. Create Virtual Environment" data-km="៣. បង្កើតបរិស្ថាននិរទេស (Virtual Environment)">៣. បង្កើតបរិស្ថាននិរទេស (Virtual Environment)</h3>
+        <p data-en="It's recommended to use a virtual environment for your projects:" data-km="វាត្រូវបានប្រកាន់ប្រើប្រាស់បរិស្ថាននិរទេសសម្រាប់គ្រោងរបស់អ្នក">វាត្រូវបានប្រកាន់ប្រើប្រាស់បរិស្ថាននិរទេសសម្រាប់គ្រោងរបស់អ្នក</p>
+        <pre><code># ដំឡើង virtualenv
+pip install virtualenv
+
+# បង្កើតបរិស្ថាននិរទេស
+python -m venv myproject_env
+
+# បើកបរិស្ថាន
+# Windows:
+myproject_env\\Scripts\\activate
+
+# macOS/Linux:
+source myproject_env/bin/activate</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Verify Installation" data-km="ពិនិត្យការដំឡើង">ពិនិត្យការដំឡើង</h2>
+      <p data-en="After installation, verify everything works correctly:" data-km="បន្ទាប់ពីដំឡើង ពិនិត្យថាអ្វីៗដំណើរការត្រឹមត្រូវ">បន្ទាប់ពីដំឡើង ពិនិត្យថាអ្វីៗដំណើរការត្រឹមត្រូវ</p>
+      <pre><code># សរសេរកម្មវិធីសាមញ្ញ
+print("Hello, Python!")
+
+# រត់ឯកសារ Python
+python my_script.py</code></pre>
+      <p data-en="You should see the output without errors." data-km="អ្នកគួរតែឃើញលទ្ធផលគ្មានកំហុស។">អ្នកគួរតែឃើញលទ្ធផលគ្មានកំហុស។</p>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Next Steps" data-km="ជំហានបន្ទាប់">ជំហានបន្ទាប់</h2>
+      <p data-en="Now that you have Python installed, go to Quick Start to begin coding." data-km="ឥឡូវនេះអ្នកបានដំឡើងរួចរាល់ហើយ សូមទៅកាន់ ការណែនាំឆាប់រហ័ស ដើម្បីចាប់ផ្តើមសរសេរកូដ។">ឥឡូវនេះអ្នកបានដំឡើងរួចរាល់ហើយ សូមទៅកាន់ <a href="/quick-start" data-en="Quick Start" data-km="ការណែនាំឆាប់រហ័ស">ការណែនាំឆាប់រហ័ស</a> ដើម្បីចាប់ផ្តើមសរសេរកូដ។</p>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #111827;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .step {
+    margin-bottom: 32px;
+  }
+
+  ul {
+    margin: 16px 0;
+    padding-left: 24px;
+  }
+
+  li {
+    margin-bottom: 8px;
+    color: #374151;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+  }
+
+  a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

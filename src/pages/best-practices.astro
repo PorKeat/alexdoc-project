@@ -1,0 +1,325 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article>
+    <h1 data-en="Best Practices for Python" data-km="ការអនុវត្តល្អបំផុតសម្រាប់ Python">ការអនុវត្តល្អបំផុតសម្រាប់ Python</h1>
+    <p class="lead" data-en="Principles and patterns for writing clean and maintainable Python code." data-km="គោលការណ៍និងគំរូសម្រាប់សរសេរកូដ Python ដែលស្អាតនិងងាយថែទាំ។">គោលការណ៍និងគំរូសម្រាប់សរសេរកូដ Python ដែលស្អាតនិងងាយថែទាំ។</p>
+
+    <section class="section">
+      <h2 data-en="PEP 8 - Code Style" data-km="PEP 8 - រចនាប័ទ្មកូដ">PEP 8 - រចនាប័ទ្មកូដ</h2>
+      <p data-en="Follow the PEP 8 standard for Python code" data-km="ធ្វើតាមស្តង់ដារ PEP 8 សម្រាប់កូដ Python">ធ្វើតាមស្តង់ដារ PEP 8 សម្រាប់កូដ Python</p>
+      <pre><code># មិនល្អ
+def CalculateTotal( x,y ):
+  return x+y
+
+# ល្អ
+def calculate_total(x, y):
+    return x + y
+
+# ឈ្មោះអថេរ - snake_case
+user_name = "Alice"
+total_amount = 100
+
+# ឈ្មោះថ្នាក់ - PascalCase
+class UserAccount:
+    pass
+
+# Constants: UPPER_CASE
+MAX_CONNECTIONS = 10
+API_KEY = "secret"
+
+# ចន្លោះប្រវែងបន្ទាត់អតិបរមា - 79 តួអក្សរ
+# ប្រើការចុះបន្ទាត់សម្រាប់កូដវែង
+result = some_function(
+    argument1,
+    argument2,
+    argument3
+)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Documentation and Comments" data-km="Documentation និង Comments">Documentation និង Comments</h2>
+      <p data-en="Write understandable code" data-km="សរសេរកូដដែលអាចយល់បាន">សរសេរកូដដែលអាចយល់បាន</p>
+      <pre><code>{`def calculate_discount(price, discount_percent):
+    """
+    គណនាតម្លៃចុងក្រោយបន្ទាប់ពីបញ្ចុះតម្លៃ។
+
+    Args:
+        price (float): តម្លៃដើម
+        discount_percent (float): ភាគរយបញ្ចុះតម្លៃ (0-100)
+
+    Returns:
+        float: តម្លៃចុងក្រោយបន្ទាប់ពីបញ្ចុះតម្លៃ
+
+    Raises:
+        ValueError: ប្រសិនបើបញ្ចុះតម្លៃមិនត្រឹមត្រូវ
+
+    Example:
+        &gt;&gt;&gt; calculate_discount(100, 10)
+        90.0
+    """
+    if not 0 <= discount_percent <= 100:
+        raise ValueError("បញ្ចុះតម្លៃត្រូវតែរវាង 0 និង 100")
+
+    discount_amount = price * (discount_percent / 100)
+    return price - discount_amount`}</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Error Handling" data-km="Error Handling">Error Handling</h2>
+      <p data-en="Manage errors correctly" data-km="គ្រប់គ្រងកំហុសយ៉ាងត្រឹមត្រូវ">គ្រប់គ្រងកំហុសយ៉ាងត្រឹមត្រូវ</p>
+      <pre><code># មិនល្អ - catch ទូទៅពេក
+try:
+    result = do_something()
+except:
+    pass
+
+# ល្អ - catch កំហុសជាក់លាក់
+try:
+    result = int(user_input)
+    result = 100 / result
+except ValueError:
+    print("សូមបញ្ចូលលេខ")
+except ZeroDivisionError:
+    print("មិនអាចចែកដោយសូន្យ")
+except Exception as e:
+    # Log កំហុសមិនរំពឹងទុក
+    logging.error(f"កំហុសមិនរំពឹងទុក  &#123;e&#125;")
+    raise
+
+# ប្រើ finally សម្រាប់សម្អាត
+file = None
+try:
+    file = open('data.txt', 'r')
+    data = file.read()
+except FileNotFoundError:
+    print("រកមិនឃើញឯកសារ")
+finally:
+    if file:
+        file.close()
+
+# ឬប្រើ context manager
+with open('data.txt', 'r') as file:
+    data = file.read()</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="List Comprehensions and Generators" data-km="List Comprehensions និង Generators">List Comprehensions និង Generators</h2>
+      <p data-en="Use them efficiently" data-km="ប្រើប្រាស់អោយមានប្រសិទ្ធភាព">ប្រើប្រាស់អោយមានប្រសិទ្ធភាព</p>
+      <pre><code># List comprehension សម្រាប់បញ្ជីតូច
+squares = [x**2 for x in range(10)]
+
+# Generator expression សម្រាប់ទិន្នន័យធំ
+squares_gen = (x**2 for x in range(1000000))
+
+# មិនល្អ - បង្កើតបញ្ជីធំក្នុងមេម៉ូរី
+total = sum([x**2 for x in range(1000000)])
+
+# ល្អ - ប្រើ generator
+total = sum(x**2 for x in range(1000000))
+
+# មិនល្អ - ងាយអាន តែមិនមានប្រសិទ្ធភាព
+result = []
+for item in items:
+    if item.is_valid():
+        result.append(item.process())
+
+# ល្អ - មានប្រសិទ្ធភាពនិងងាយអាន
+result = [item.process() for item in items if item.is_valid()]</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Function Best Practices" data-km="Function Best Practices">Function Best Practices</h2>
+      <p data-en="Write quality functions" data-km="សរសេរមុខងារមានគុណភាព">សរសេរមុខងារមានគុណភាព</p>
+      <pre><code># Single Responsibility - មុខងារមួយធ្វើការមួយ
+def get_user_from_database(user_id):
+    """ទាញយកអ្នកប្រើប្រាស់ពីមូលដ្ឋានទិន្នន័យ"""
+    return db.query(User).filter_by(id=user_id).first()
+
+def validate_user_data(user_data):
+    """ពិនិត្យទិន្នន័យអ្នកប្រើប្រាស់"""
+    if not user_data.get('email'):
+        raise ValueError("តម្រូវឱ្យមានអ៊ីមែល")
+    return True
+
+# ប្រើ default arguments
+def create_user(name, email, role='user', active=True):
+    return User(name=name, email=email, role=role, active=active)
+
+# ប្រើ *args និង **kwargs យ៉ាងសមរម្យ
+def log_message(message, *tags, **metadata):
+    print(f"&#123;message&#125; - Tags: &#123;tags&#125; - Meta: &#123;metadata&#125;")
+
+log_message("User login", "auth", "success", user_id=123)
+
+# ប្រើ type hints
+def calculate_total(items: list[dict], tax_rate: float = 0.1) -> float:
+    subtotal = sum(item['price'] for item in items)
+    return subtotal * (1 + tax_rate)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Security Best Practices" data-km="Security Best Practices">Security Best Practices</h2>
+      <p data-en="Keep your code secure" data-km="រក្សាកូដរបស់អ្នកឱ្យមានសុវត្ថិភាព">រក្សាកូដរបស់អ្នកឱ្យមានសុវត្ថិភាព</p>
+      <pre><code># កុំដាក់ secrets ក្នុងកូដ
+# មិនល្អ
+API_KEY = "sk_live_1234567890"
+DATABASE_URL = "postgresql://user:password@localhost/db"
+
+# ល្អ - ប្រើអថេរបរិស្ថាន
+import os
+API_KEY = os.getenv('API_KEY')
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+# ការពារ SQL injection
+# មិនល្អ
+query = f"SELECT * FROM users WHERE username = '&#123;username&#125;'"
+
+# ល្អ - ប្រើ parameterized queries
+query = "SELECT * FROM users WHERE username = ?"
+cursor.execute(query, (username,))
+
+# Hash passwords
+from werkzeug.security import generate_password_hash
+hashed = generate_password_hash(password)
+
+# Validate input
+def sanitize_input(user_input):
+    # លុសតួអក្សរមានគ្រោះថ្នាក់
+    return user_input.strip().replace('&lt;', '').replace('&gt;', '')</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Testing Best Practices" data-km="Testing Best Practices">Testing Best Practices</h2>
+      <p data-en="Write good tests to ensure code quality" data-km="សរសេរតេស្តល្អដើម្បីធានាគុណភាពកូដ">សរសេរតេស្តល្អដើម្បីធានាគុណភាពកូដ</p>
+      <pre><code>import unittest
+
+class TestUserFunctions(unittest.TestCase):
+    def setUp(self):
+        """រៀបចំមុនតេស្តនីមួយៗ"""
+        self.user = User(name="Test", email="test@example.com")
+
+    def test_user_creation(self):
+        """តេស្តការបង្កើតអ្នកប្រើប្រាស់"""
+        self.assertEqual(self.user.name, "Test")
+        self.assertEqual(self.user.email, "test@example.com")
+
+    def test_email_validation(self):
+        """តេស្តការពិនិត្យអ៊ីមែល"""
+        with self.assertRaises(ValueError):
+            User(name="Test", email="invalid-email")
+
+    def tearDown(self):
+        """សម្អាតបន្ទាប់ពីតេស្ត"""
+        self.user = None
+
+# រត់តេស្ត
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Performance Tips" data-km="Performance Tips">Performance Tips</h2>
+      <p data-en="Increase your code speed" data-km="បង្កើនល្បឿនកូដរបស់អ្នក">បង្កើនល្បឿនកូដរបស់អ្នក</p>
+      <pre><code># ប្រើ sets សម្រាប់ការស្វែងរកលឿន
+# មិនល្អ
+items = [1, 2, 3, 4, 5]
+if 3 in items:  # O(n)
+    pass
+
+# ល្អ
+items = &#123;1, 2, 3, 4, 5&#125;
+if 3 in items:  # O(1)
+    pass
+
+# ប្រើ dict.get() ជំនួសការពិនិត្យ key
+# មិនល្អ
+if 'key' in data:
+    value = data['key']
+else:
+    value = 'default'
+
+# ល្អ
+value = data.get('key', 'default')
+
+# ប្រើ join() សម្រាប់បន្សំខ្សែអក្សរ
+# មិនល្អ
+result = ""
+for item in items:
+    result += str(item) + ", "
+
+# ល្អ
+result = ", ".join(str(item) for item in items)</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>
