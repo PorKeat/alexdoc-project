@@ -1,0 +1,301 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article>
+    <h1 data-en="Python API Reference" data-km="សេចក្តីយោង API Python">សេចក្តីយោង API Python</h1>
+    <p class="lead" data-en="Complete reference documentation for all APIs and methods." data-km="ឯកសារសេចក្តីយោងពេញលេញសម្រាប់ API និងវិធីសាស្ត្រទាំងអស់។">ឯកសារសេចក្តីយោងពេញលេញសម្រាប់ API និងវិធីសាស្ត្រទាំងអស់។</p>
+
+    <section class="section">
+      <h2 data-en="Overview" data-km="ទិឌ្ឋភាពទូទៅ">ទិឌ្ឋភាពទូទៅ</h2>
+      <p data-en="The Python API provides a complete set of methods for interacting with the platform. All APIs use RESTful standards and return JSON responses." data-km="Python API ផ្តល់នូវសំណុវិធីសាស្ត្រគ្រប់គ្រាន់ ក្នុងការទាក់ទងជាមួយវេទិកា។ API ទាំងអស់ប្រើស្ទានឌា RESTful និងត្រឡាប់ឈ្លើយជា JSON។">Python API ផ្តល់នូវសំណុវិធីសាស្ត្រគ្រប់គ្រាន់ ក្នុងការទាក់ទងជាមួយវេទិកា។ API ទាំងអស់ប្រើស្ទានឌា RESTful និងត្រឡាប់ឈ្លើយជា JSON។</p>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Base URL" data-km="URL មូលដ្ឋាន">URL មូលដ្ឋាន</h2>
+      <p data-en="For Flask API" data-km="សម្រាប់ Flask API">សម្រាប់ Flask API</p>
+      <pre><code>http://localhost:5000/api/v1</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Authentication" data-km="ការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ">ការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ</h2>
+      <p data-en="All API requests require authentication using an API key or JWT token. Include the token in the header" data-km="សំណើរ API ទាំងអស់ត្រូវការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវដោយប្រើ API key ឬ JWT token។ បញ្ជូល token នៅក្នុង header">សំណើរ API ទាំងអស់ត្រូវការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវដោយប្រើ API key ឬ JWT token។ បញ្ជូល token នៅក្នុង header</p>
+      <pre><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+      <p data-en="Example using Python requests" data-km="ឧទាហរណ៍ប្រើ Python requests">ឧទាហរណ៍ប្រើ Python requests</p>
+      <pre><code>import requests
+
+headers = &#123;
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+&#125;
+
+response = requests.get('http://localhost:5000/api/users', headers=headers)
+print(response.json())</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>រចនាសម្ព័ន្ធជំលើយទូទៅ</h2>
+      <p>ឈ្លើយ API ទាំងអស់មានរចនាសម្ព័ន្ធដូចខាងក្រោម </p>
+      <pre><code>&#123;
+  "success": true,
+  "data": &#123;
+    "users": [...]
+  &#125;,
+  "message": "ទទួលបានទិន្នន័យដោយជោគជ័យ"
+&#125;</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>ការគ្រប់គ្រងកំហុស</h2>
+      <p>នៅពេលមានកំហុសកើតឡើង API នឹងត្រឡាប់ HTTP status code និងសារកំហុសត្រូវការ </p>
+      <pre><code>&#123;
+  "success": false,
+  "error": &#123;
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message"
+  &#125;
+&#125;</code></pre>
+
+      <div class="status-codes">
+        <h3>លេខស្ថានភាពទូទៅ</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>លេខកូដ</th>
+              <th>ពិពរណ៌នា</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="inline-code">200</code></td>
+              <td>សំណើរជោគជ័យ</td>
+            </tr>
+            <tr>
+              <td><code class="inline-code">201</code></td>
+              <td>បានបង្កើតធនធាន</td>
+            </tr>
+            <tr>
+              <td><code class="inline-code">400</code></td>
+              <td>សំណើរមិនត្រឹមត្រូវ</td>
+            </tr>
+            <tr>
+              <td><code class="inline-code">401</code></td>
+              <td>មិនមានសិទ្ធិ</td>
+            </tr>
+            <tr>
+              <td><code class="inline-code">404</code></td>
+              <td>រកមិនឃើញ</td>
+            </tr>
+            <tr>
+              <td><code class="inline-code">500</code></td>
+              <td>កំហុសម៉ាស៊ីនមេ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>កំណត់ចំនួនសំណើរ</h2>
+      <p>សំណើរ API ត្រូវបានកំណត់ដើម្បីធានាបានការប្រើប្រាស់សមរម្យ </p>
+      <ul>
+        <li>កម្រិតមេមុលដ្ឋាន  1,000 សំណើរក្នុង១ម៉ោង</li>
+        <li>កម្រិតសំបើក  10,000 សំណើរក្នុង១ម៉ោង</li>
+        <li>ស្រៀកសំបើក  កំណត់ផ្ទាល់ខ្លួន</li>
+      </ul>
+      <p>ព័ត៌មានកំណត់ចំនួនសំណើរនៅក្នុង response headers</p>
+      <pre><code>X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1640995200</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>ស្វែងរកបន្ថែម</h2>
+      <div class="api-links">
+        <a href="/api/methods" class="api-link-card">
+          <h3>វិធីសាស្ត្រដែលមាន</h3>
+          <p>រូចរក endpoints និងវិធីសាស្ត្រ API ទាំងអស់</p>
+        </a>
+        <a href="/api/types" class="api-link-card">
+          <h3>ប្រភេទទិន្នន័យ</h3>
+          <p>មើលប្រភេទទិន្នន័យនិង type hints</p>
+        </a>
+      </div>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 24px 0 12px 0;
+    color: #111827;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+  }
+
+  .inline-code {
+    background: #f3f4f6;
+    color: #1f2937;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  ul {
+    margin: 16px 0;
+    padding-left: 24px;
+  }
+
+  li {
+    margin-bottom: 8px;
+    color: #374151;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  thead {
+    background: #f9fafb;
+  }
+
+  th {
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: #111827;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover {
+    background: #f9fafb;
+  }
+
+  .api-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .api-link-card {
+    padding: 20px;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .api-link-card:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .api-link-card h3 {
+    color: #2563eb;
+    margin: 0 0 8px 0;
+    font-size: 18px;
+  }
+
+  .api-link-card p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+
+    table {
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 8px 12px;
+    }
+
+    .api-links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

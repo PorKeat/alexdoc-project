@@ -1,0 +1,329 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc">
+  <article class="content">
+    <h1 data-en="Python API Methods" data-km="វិធីសាស្ត្រ API Python">វិធីសាស្ត្រ API Python</h1>
+    <p class="lead" data-en="Detailed documentation of all methods and endpoints" data-km="ឯកសារលម្អិតអំពីវិធីសាស្ត្រនិង endpoints ទាំងអស់">ឯកសារលម្អិតអំពីវិធីសាស្ត្រនិង endpoints ទាំងអស់។</p>
+
+    <section class="section">
+      <h2 data-en="Flask API Methods" data-km="វិធីសាស្ត្រ Flask API">វិធីសាស្ត្រ Flask API</h2>
+      <p data-en="Essential methods for building RESTful APIs" data-km="វិធីសាស្ត្រសំខាន់ៗសម្រាប់បង្កើត RESTful APIs">វិធីសាស្ត្រសំខាន់ៗសម្រាប់បង្កើត RESTful APIs</p>
+      <pre><code>from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# GET - ទទួលយកទិន្នន័យ
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    users = [
+        &#123;'id': 1, 'name': 'Alice', 'email': 'alice@example.com'&#125;,
+        &#123;'id': 2, 'name': 'Bob', 'email': 'bob@example.com'&#125;
+    ]
+    return jsonify(&#123;'users': users, 'count': len(users)&#125;)
+
+# GET - ទទួលយកតែមួយ
+@app.route('/api/users/&lt;int:user_id&gt;', methods=['GET'])
+def get_user(user_id):
+    user = &#123;'id': user_id, 'name': 'Alice'&#125;
+    return jsonify(user)
+
+# POST - បង្កើតថ្មី
+@app.route('/api/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    new_user = &#123;
+        'id': 3,
+        'name': data.get('name'),
+        'email': data.get('email')
+    &#125;
+    return jsonify(new_user), 201
+
+# PUT - ធ្វើបច្ចុប្បន្នភាពពេញលេញ
+@app.route('/api/users/&lt;int:user_id&gt;', methods=['PUT'])
+def update_user(user_id):
+    data = request.get_json()
+    updated_user = &#123;
+        'id': user_id,
+        'name': data.get('name'),
+        'email': data.get('email')
+    &#125;
+    return jsonify(updated_user)
+
+# PATCH - ធ្វើបច្ចុប្បន្នភាពផ្នែក
+@app.route('/api/users/&lt;int:user_id&gt;', methods=['PATCH'])
+def patch_user(user_id):
+    data = request.get_json()
+    return jsonify(&#123;'id': user_id, **data&#125;)
+
+# DELETE - លុប
+@app.route('/api/users/&lt;int:user_id&gt;', methods=['DELETE'])
+def delete_user(user_id):
+    return jsonify(&#123;'message': f'បានលុបអ្នកប្រើប្រាស់ &#123;user_id&#125;'&#125;), 204</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Request Handling" data-km="ការគ្រប់គ្រងសំណើ">ការគ្រប់គ្រងសំណើ</h2>
+      <p data-en="Managing different types of requests" data-km="ការគ្រប់គ្រងសំណើផ្សេងៗ">ការគ្រប់គ្រងសំណើផ្សេងៗ</p>
+      <pre><code>from flask import request
+
+@app.route('/api/search', methods=['GET'])
+def search():
+    # Query parameters
+    query = request.args.get('q', '')
+    page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', 10, type=int)
+
+    # Headers
+    auth_token = request.headers.get('Authorization')
+    content_type = request.headers.get('Content-Type')
+
+    # Cookies
+    session_id = request.cookies.get('session_id')
+
+    return jsonify(&#123;
+        'query': query,
+        'page': page,
+        'limit': limit
+    &#125;)
+
+@app.route('/api/upload', methods=['POST'])
+def upload_file():
+    # ឯកសារ
+    if 'file' not in request.files:
+        return jsonify(&#123;"error": "គ្មានឯកសារ"&#125;), 400
+
+    file = request.files['file']
+
+    # Form data
+    description = request.form.get('description')
+
+    # JSON data
+    if request.is_json:
+        data = request.get_json()
+
+    return jsonify(&#123;"message": "ផ្ទុកឡើងបានជោគជ័យ"&#125;)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Response Formatting" data-km="ការធ្វើទ្រង់ទ្រាយចម្លើយ">ការធ្វើទ្រង់ទ្រាយចម្លើយ</h2>
+      <p data-en="Formatting API responses" data-km="ការធ្វើទ្រង់ទ្រាយចម្លើយ API">ការធ្វើទ្រង់ទ្រាយចម្លើយ API</p>
+      <pre><code>from flask import jsonify, make_response
+
+# JSON response ស្តង់ដារ
+@app.route('/api/data')
+def get_data():
+    return jsonify(&#123;
+        'success': True,
+        'data': &#123;'key': 'value'&#125;,
+        'message': 'ទទួលបានទិន្នន័យដោយជោគជ័យ'
+    &#125;)
+
+# Custom status code
+@app.route('/api/create')
+def create():
+    return jsonify(&#123;'id': 1&#125;), 201
+
+# Custom headers
+@app.route('/api/protected')
+def protected():
+    response = make_response(jsonify(&#123;'data': 'secret'&#125;))
+    response.headers['X-Custom-Header'] = 'value'
+    return response
+
+# Set cookies
+@app.route('/api/login')
+def login():
+    response = make_response(jsonify(&#123;"message": "ចូលបានជោគជ័យ"&#125;))
+    response.set_cookie('session_id', 'abc123', httponly=True)
+    return response</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Pagination" data-km="ការបែងចែកទំព័រ">ការបែងចែកទំព័រ</h2>
+      <p data-en="Implementing pagination for large datasets" data-km="អនុវត្តការបែងចែកទំព័រសម្រាប់សំណុំទិន្នន័យធំ">អនុវត្តការបែងចែកទំព័រសម្រាប់សំណុំទិន្នន័យធំ</p>
+      <pre><code>{`from flask import request, jsonify, url_for
+
+@app.route('/api/posts', methods=['GET'])
+def get_posts():
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+
+    # ទាញយកទិន្នន័យ (ឧទាហរណ៍)
+    total_posts = 100
+    posts = [
+        &#123;'id': i, 'title': f'Post &#123;i&#125;'&#125;
+        for i in range((page-1)*per_page, min(page*per_page, total_posts))
+    ]
+
+    # គណនា pagination metadata
+    total_pages = (total_posts + per_page - 1) // per_page
+
+    return jsonify(&#123;
+        'posts': posts,
+        'pagination': &#123;
+            'page': page,
+            'per_page': per_page,
+            'total': total_posts,
+            'total_pages': total_pages,
+            'has_next': page < total_pages,
+            'has_prev': page > 1,
+            'next_url': url_for('get_posts', page=page+1, _external=True) if page < total_pages else None,
+            'prev_url': url_for('get_posts', page=page-1, _external=True) if page > 1 else None
+        &#125;
+    &#125;)`}</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Filtering and Sorting" data-km="ការតម្រងនិងតម្រៀប">ការតម្រងនិងតម្រៀប</h2>
+      <p data-en="Filtering and sorting data" data-km="ការតម្រងនិងតម្រៀបទិន្នន័យ">ការតម្រងនិងតម្រៀបទិន្នន័យ</p>
+      <pre><code>@app.route('/api/products', methods=['GET'])
+def get_products():
+    # Filter parameters
+    category = request.args.get('category')
+    min_price = request.args.get('min_price', type=float)
+    max_price = request.args.get('max_price', type=float)
+
+    # Sort parameters
+    sort_by = request.args.get('sort_by', 'name')
+    order = request.args.get('order', 'asc')
+
+    # ក្នុងពិត អ្នកនឹងសួរមូលដ្ឋានទិន្នន័យ
+    products = [
+        &#123;'id': 1, 'name': 'Laptop', 'price': 999, 'category': 'electronics'&#125;,
+        &#123;'id': 2, 'name': 'Mouse', 'price': 29, 'category': 'accessories'&#125;
+    ]
+
+    # អនុវត្តការតម្រង
+    if category:
+        products = [p for p in products if p['category'] == category]
+    if min_price:
+        products = [p for p in products if p['price'] &gt;= min_price]
+    if max_price:
+        products = [p for p in products if p['price'] &lt;= max_price]
+
+    # អនុវត្តការតម្រៀប
+    reverse = order == 'desc'
+    products.sort(key=lambda x: x.get(sort_by, ''), reverse=reverse)
+
+    return jsonify(&#123;'products': products&#125;)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Rate Limiting" data-km="កំណត់ចំនួនសំណើ">កំណត់ចំនួនសំណើ</h2>
+      <p data-en="Limiting request rates to prevent abuse" data-km="កំណត់អត្រាសំណើដើម្បីការពារការប្រើប្រាស់លើស">កំណត់អត្រាសំណើដើម្បីការពារការប្រើប្រាស់លើស</p>
+      <pre><code>{`from flask import request, jsonify
+from functools import wraps
+import time
+
+# ទិន្នន័យតាមដានសំណើ
+request_counts = &#123;&#125;
+
+def rate_limit(max_requests=10, window=60):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            # ទទួលយក IP របស់អ្នកប្រើប្រាស់
+            client_ip = request.remote_addr
+            current_time = time.time()
+
+            # ធ្វើបច្ចុប្បន្នភាពចំនួនសំណើ
+            if client_ip not in request_counts:
+                request_counts[client_ip] = []
+
+            # លុសសំណើចាស់
+            request_counts[client_ip] = [
+                req_time for req_time in request_counts[client_ip]
+                if current_time - req_time < window
+            ]
+
+            # ពិនិត្យកំណត់
+            if len(request_counts[client_ip]) >= max_requests:
+                return jsonify(&#123;
+                    'error': 'លើសកំណត់សំណើ',
+                    'retry_after': window
+                &#125;), 429
+
+            # បន្ថែមសំណើបច្ចុប្បន្ន
+            request_counts[client_ip].append(current_time)
+
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+@app.route('/api/limited', methods=['GET'])
+@rate_limit(max_requests=5, window=60)
+def limited_endpoint():
+    return jsonify(&#123;"message": "ទិន្នន័យដែលមានកំណត់"&#125;)`}</code></pre>
+    </section>
+  </article>
+</DocsLayout>
+
+<style>
+  article {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #111827;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 32px 0 16px 0;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+  }
+
+  .lead {
+    font-size: 20px;
+    color: #6b7280;
+    margin: 0 0 48px 0;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  pre {
+    background: #1f2937;
+    color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    .lead {
+      font-size: 18px;
+    }
+
+    pre {
+      font-size: 12px;
+      padding: 12px;
+    }
+  }
+</style>

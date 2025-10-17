@@ -1,0 +1,254 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="AlexDoc - API Types">
+  <article class="content">
+    <h1 data-en="API Types & Data Structures" data-km="ប្រភេទ API និងរចនាសម្ព័ន្ធទិន្នន័យ">ប្រភេទ API និងរចនាសម្ព័ន្ធទិន្នន័យ</h1>
+    <p class="lead" data-en="Complete reference for data types and structures used in the API" data-km="ឯកសារយោងពេញលេញសម្រាប់ប្រភេទទិន្នន័យនិងរចនាសម្ព័ន្ធដែលប្រើក្នុង API">ឯកសារយោងពេញលេញសម្រាប់ប្រភេទទិន្នន័យនិងរចនាសម្ព័ន្ធដែលប្រើក្នុង API</p>
+
+    <section class="section">
+      <h2 data-en="Basic Data Types" data-km="ប្រភេទទិន្នន័យមូលដ្ឋាន">ប្រភេទទិន្នន័យមូលដ្ឋាន</h2>
+      <p data-en="Python's fundamental data types used in API development" data-km="ប្រភេទទិន្នន័យមូលដ្ឋានរបស់ Python ដែលប្រើក្នុងការអភិវឌ្ឍ API">ប្រភេទទិន្នន័យមូលដ្ឋានរបស់ Python ដែលប្រើក្នុងការអភិវឌ្ឍ API</p>
+      <pre><code># String - សម្រាប់អត្ថបទ
+name: str = "John Doe"
+email: str = "john@example.com"
+
+# Integer - លេខគត់
+user_id: int = 12345
+age: int = 25
+
+# Float - លេខទសភាគ
+price: float = 99.99
+rating: float = 4.5
+
+# Boolean - តម្លៃពិត/មិនពិត
+is_active: bool = True
+is_verified: bool = False
+
+# None - តម្លៃទទេ
+optional_field = None</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Collection Types" data-km="ប្រភេទបណ្តុំ">ប្រភេទបណ្តុំ</h2>
+      <p data-en="Working with lists, dictionaries, and other collections" data-km="ការធ្វើការជាមួយបញ្ជី dictionary និងបណ្តុំផ្សេងទៀត">ការធ្វើការជាមួយបញ្ជី dictionary និងបណ្តុំផ្សេងទៀត</p>
+      <pre><code>from typing import List, Dict, Set, Tuple
+
+# List - បញ្ជីធាតុ
+user_ids: List[int] = [1, 2, 3, 4, 5]
+tags: List[str] = ["python", "api", "flask"]
+
+# Dictionary - ផែនទីគន្លឹះ-តម្លៃ
+user: Dict[str, any] = &#123;
+    "id": 1,
+    "name": "Alice",
+    "email": "alice@example.com"
+&#125;
+
+# Set - បណ្តុំតម្លៃតែមួយ
+unique_tags: Set[str] = &#123;"python", "flask", "api"&#125;
+
+# Tuple - បញ្ជីមិនអាចផ្លាស់ប្តូរ
+coordinates: Tuple[float, float] = (10.5, 20.3)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Optional & Union Types" data-km="ប្រភេទជម្រើសនិង Union">ប្រភេទជម្រើសនិង Union</h2>
+      <p data-en="Handle optional values and multiple types" data-km="គ្រប់គ្រងតម្លៃជម្រើសនិងប្រភេទច្រើន">គ្រប់គ្រងតម្លៃជម្រើសនិងប្រភេទច្រើន</p>
+      <pre><code>from typing import Optional, Union
+
+# Optional - អាចជា None
+middle_name: Optional[str] = None
+phone: Optional[str] = "+1234567890"
+
+# Union - អាចជាប្រភេទមួយក្នុងចំណោម
+user_id: Union[int, str] = 123
+user_id: Union[int, str] = "user_123"
+
+# ឧទាហរណ៍ប្រើក្នុង function
+def get_user(user_id: Union[int, str]) -&gt; Optional[Dict]:
+    # អនុវត្តស្វែងរក
+    if user_id == 1:
+        return &#123;"id": 1, "name": "Alice"&#125;
+    return None</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Custom Type Hints" data-km="ការកំណត់ប្រភេទផ្ទាល់ខ្លួន">ការកំណត់ប្រភេទផ្ទាល់ខ្លួន</h2>
+      <p data-en="Create type aliases for better code documentation" data-km="បង្កើតឈ្មោះហៅក្រៅប្រភេទសម្រាប់ឯកសារកូដកាន់តែល្អ">បង្កើតឈ្មោះហៅក្រៅប្រភេទសម្រាប់ឯកសារកូដកាន់តែល្អ</p>
+      <pre><code>from typing import Dict, List, NewType
+
+# Type aliases
+UserId = int
+Email = str
+JSON = Dict[str, any]
+
+# ប្រើ type aliases
+def get_user_by_id(user_id: UserId) -&gt; JSON:
+    return &#123;"id": user_id, "name": "Alice"&#125;
+
+def send_email(email: Email, subject: str) -&gt; bool:
+    # ផ្ញើអ៊ីមែល
+    return True
+
+# NewType - បង្កើតប្រភេទថ្មី
+UserId = NewType('UserId', int)
+ProductId = NewType('ProductId', int)
+
+user_id = UserId(123)
+product_id = ProductId(456)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Pydantic Models" data-km="ម៉ូដែល Pydantic">ម៉ូដែល Pydantic</h2>
+      <p data-en="Data validation using Pydantic models" data-km="ការផ្ទៀងផ្ទាត់ទិន្នន័យដោយប្រើម៉ូដែល Pydantic">ការផ្ទៀងផ្ទាត់ទិន្នន័យដោយប្រើម៉ូដែល Pydantic</p>
+      <pre><code>from pydantic import BaseModel, EmailStr, Field
+from typing import Optional, List
+from datetime import datetime
+
+class User(BaseModel):
+    id: int
+    username: str = Field(..., min_length=3, max_length=50)
+    email: EmailStr
+    full_name: Optional[str] = None
+    age: int = Field(..., ge=0, le=150)
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=datetime.now)
+    tags: List[str] = []
+
+    class Config:
+        schema_extra = &#123;
+            "example": &#123;
+                "id": 1,
+                "username": "johndoe",
+                "email": "john@example.com",
+                "full_name": "John Doe",
+                "age": 30,
+                "is_active": True,
+                "tags": ["admin", "user"]
+            &#125;
+        &#125;
+
+# ប្រើម៉ូដែល
+user_data = &#123;
+    "id": 1,
+    "username": "alice",
+    "email": "alice@example.com",
+    "age": 25
+&#125;
+
+user = User(**user_data)
+print(user.json())</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Response Models" data-km="ម៉ូដែលចម្លើយ">ម៉ូដែលចម្លើយ</h2>
+      <p data-en="Standard response structures for APIs" data-km="រចនាសម្ព័ន្ធចម្លើយស្តង់ដារសម្រាប់ APIs">រចនាសម្ព័ន្ធចម្លើយស្តង់ដារសម្រាប់ APIs</p>
+      <pre><code>from pydantic import BaseModel
+from typing import Optional, Generic, TypeVar, List
+
+T = TypeVar('T')
+
+class SuccessResponse(BaseModel, Generic[T]):
+    success: bool = True
+    data: T
+    message: Optional[str] = None
+
+class ErrorResponse(BaseModel):
+    success: bool = False
+    error: str
+    error_code: Optional[str] = None
+    details: Optional[dict] = None
+
+class PaginatedResponse(BaseModel, Generic[T]):
+    items: List[T]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
+
+# ឧទាហរណ៍ការប្រើ
+@app.get("/users/&#123;user_id&#125;")
+def get_user(user_id: int) -&gt; SuccessResponse[User]:
+    user = User(id=user_id, username="alice", email="alice@example.com", age=25)
+    return SuccessResponse(data=user, message="User retrieved successfully")
+
+@app.get("/users")
+def list_users() -&gt; PaginatedResponse[User]:
+    users = [User(id=i, username=f"user&#123;i&#125;", email=f"user&#123;i&#125;@example.com", age=20+i) for i in range(1, 6)]
+    return PaginatedResponse(
+        items=users,
+        total=100,
+        page=1,
+        page_size=5,
+        total_pages=20
+    )</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="Enum Types" data-km="ប្រភេទ Enum">ប្រភេទ Enum</h2>
+      <p data-en="Define fixed sets of values" data-km="កំណត់សំណុំតម្លៃថេរ">កំណត់សំណុំតម្លៃថេរ</p>
+      <pre><code>from enum import Enum
+
+class UserRole(str, Enum):
+    ADMIN = "admin"
+    USER = "user"
+    GUEST = "guest"
+    MODERATOR = "moderator"
+
+class OrderStatus(str, Enum):
+    PENDING = "pending"
+    PROCESSING = "processing"
+    SHIPPED = "shipped"
+    DELIVERED = "delivered"
+    CANCELLED = "cancelled"
+
+class PaymentMethod(str, Enum):
+    CREDIT_CARD = "credit_card"
+    PAYPAL = "paypal"
+    BANK_TRANSFER = "bank_transfer"
+    CASH = "cash"
+
+# ប្រើ Enum
+def create_user(username: str, role: UserRole):
+    return &#123;
+        "username": username,
+        "role": role.value
+    &#125;
+
+new_user = create_user("alice", UserRole.ADMIN)</code></pre>
+    </section>
+
+    <section class="section">
+      <h2 data-en="DateTime Handling" data-km="គ្រប់គ្រងកាលបរិច្ឆេទនិងពេលវេលា">គ្រប់គ្រងកាលបរិច្ឆេទនិងពេលវេលា</h2>
+      <p data-en="Working with dates and times in APIs" data-km="ការធ្វើការជាមួយកាលបរិច្ឆេទនិងពេលវេលាក្នុង APIs">ការធ្វើការជាមួយកាលបរិច្ឆេទនិងពេលវេលាក្នុង APIs</p>
+      <pre><code>from datetime import datetime, date, time, timedelta
+from pydantic import BaseModel
+
+class Event(BaseModel):
+    title: str
+    start_date: date
+    start_time: time
+    created_at: datetime
+    duration: timedelta
+
+# ឧទាហរណ៍
+event = Event(
+    title="Meeting",
+    start_date=date(2024, 1, 15),
+    start_time=time(14, 30),
+    created_at=datetime.now(),
+    duration=timedelta(hours=2)
+)
+
+# ការបំលែង
+event_json = event.json()
+event_dict = event.dict()
+
+# ISO Format
+iso_datetime = datetime.now().isoformat()
+# Output: "2024-01-15T14:30:00"</code></pre>
+    </section>
+  </article>
+</DocsLayout>
